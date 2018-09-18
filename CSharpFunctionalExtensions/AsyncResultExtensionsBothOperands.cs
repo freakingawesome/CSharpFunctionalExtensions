@@ -9,6 +9,19 @@ namespace CSharpFunctionalExtensions
     /// </summary>
     public static class AsyncResultExtensionsBothOperands
     {
+        public static async Task<Result<K, Err>> OnSuccess<T, Err, K>(this Task<Result<T, Err>> resultTask, Func<T, Task<K>> func, bool continueOnCapturedContext = true)
+            where Err : class
+        {
+            Result<T, Err> result = await resultTask.ConfigureAwait(continueOnCapturedContext);
+
+            if (result.IsFailure)
+                return Result.Fail<K, Err>(result.Error);
+
+            K value = await func(result.Value);
+
+            return Result.Ok<K, Err>(value);
+        }
+
         public static async Task<Result<K>> OnSuccess<T, K>(this Task<Result<T>> resultTask, Func<T, Task<K>> func, bool continueOnCapturedContext = true)
         {
             Result<T> result = await resultTask.ConfigureAwait(continueOnCapturedContext);
@@ -33,6 +46,17 @@ namespace CSharpFunctionalExtensions
             return Result.Ok(value);
         }
 
+        public static async Task<Result<K, Err>> OnSuccess<T, Err, K>(this Task<Result<T, Err>> resultTask, Func<T, Task<Result<K, Err>>> func, bool continueOnCapturedContext = true)
+            where Err : class
+        {
+            Result<T, Err> result = await resultTask.ConfigureAwait(continueOnCapturedContext);
+
+            if (result.IsFailure)
+                return Result.Fail<K, Err>(result.Error);
+
+            return await func(result.Value);
+        }
+
         public static async Task<Result<K>> OnSuccess<T, K>(this Task<Result<T>> resultTask, Func<T, Task<Result<K>>> func, bool continueOnCapturedContext = true)
         {
             Result<T> result = await resultTask.ConfigureAwait(continueOnCapturedContext);
@@ -49,6 +73,17 @@ namespace CSharpFunctionalExtensions
 
             if (result.IsFailure)
                 return Result.Fail<T>(result.Error);
+
+            return await func().ConfigureAwait(continueOnCapturedContext);
+        }
+
+        public static async Task<Result<K, Err>> OnSuccess<T, Err, K>(this Task<Result<T, Err>> resultTask, Func<Task<Result<K, Err>>> func, bool continueOnCapturedContext = true)
+            where Err : class
+        {
+            Result<T, Err> result = await resultTask.ConfigureAwait(continueOnCapturedContext);
+
+            if (result.IsFailure)
+                return Result.Fail<K, Err>(result.Error);
 
             return await func().ConfigureAwait(continueOnCapturedContext);
         }
@@ -131,6 +166,19 @@ namespace CSharpFunctionalExtensions
             T value = await func().ConfigureAwait(continueOnCapturedContext);
 
             return Result.Ok(value);
+        }
+
+        public static async Task<Result<T, Err>> OnSuccess<T, Err>(this Task<Result<T, Err>> resultTask, Func<T, Task> action, bool continueOnCapturedContext = true)
+            where Err : class
+        {
+            Result<T, Err> result = await resultTask.ConfigureAwait(continueOnCapturedContext);
+
+            if (result.IsSuccess)
+            {
+                await action(result.Value).ConfigureAwait(continueOnCapturedContext);
+            }
+
+            return result;
         }
 
         public static async Task<Result<T>> OnSuccess<T>(this Task<Result<T>> resultTask, Func<T, Task> action, bool continueOnCapturedContext = true)
