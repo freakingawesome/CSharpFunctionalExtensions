@@ -10,7 +10,6 @@ namespace CSharpFunctionalExtensions.Examples.ResultExtensions
             var database = new Database();
 
             return GetById(customerId)
-                .ToResult("Customer with such Id is not found: " + customerId)
                 .OnSuccess(customer => customer.AddBalance(moneyAmount))
                 .OnSuccess(customer => paymentGateway.ChargePayment(customer, moneyAmount).Map(() => customer))
                 .OnSuccess(
@@ -19,9 +18,9 @@ namespace CSharpFunctionalExtensions.Examples.ResultExtensions
                 .OnBoth(result => result.IsSuccess ? "OK" : result.Error);
         }
 
-        private Maybe<Customer> GetById(long id)
+        private Result<Customer> GetById(long id)
         {
-            return new Customer();
+            return Result.Ok(new Customer());
         }
 
         private class Customer

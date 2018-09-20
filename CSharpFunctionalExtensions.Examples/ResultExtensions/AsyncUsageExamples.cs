@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 
 namespace CSharpFunctionalExtensions.Examples.ResultExtensions
 {
@@ -9,7 +9,6 @@ namespace CSharpFunctionalExtensions.Examples.ResultExtensions
             var gateway = new EmailGateway();
 
             return await GetByIdAsync(id)
-                .ToResult("Customer with such Id is not found: " + id)
                 .Ensure(customer => customer.CanBePromoted(), "The customer has the highest status possible")
                 .OnSuccess(customer => customer.Promote())
                 .OnSuccess(customer => gateway.SendPromotionNotification(customer.Email))
@@ -21,21 +20,20 @@ namespace CSharpFunctionalExtensions.Examples.ResultExtensions
             var gateway = new EmailGateway();
 
             return await GetByIdAsync(id)
-                .ToResult("Customer with such Id is not found: " + id)
                 .Ensure(customer => customer.CanBePromoted(), "The customer has the highest status possible")
                 .OnSuccess(customer => customer.PromoteAsync())
                 .OnSuccess(customer => gateway.SendPromotionNotificationAsync(customer.Email))
                 .OnBoth(result => result.IsSuccess ? "Ok" : result.Error);
         }
 
-        public Task<Maybe<Customer>> GetByIdAsync(long id)
+        public Task<Result<Customer>> GetByIdAsync(long id)
         {
-            return Task.FromResult((Maybe<Customer>)new Customer());
+            return Task.FromResult(Result.Ok(new Customer()));
         }
 
-        public Maybe<Customer> GetById(long id)
+        public Result<Customer> GetById(long id)
         {
-            return new Customer();
+            return Result.Ok(new Customer());
         }
 
         public class Customer

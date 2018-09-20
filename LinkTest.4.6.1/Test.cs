@@ -1,4 +1,4 @@
-﻿using CSharpFunctionalExtensions;
+using CSharpFunctionalExtensions;
 
 namespace LinkTest
 {
@@ -6,9 +6,9 @@ namespace LinkTest
     {
         static void ForceLink() // If the library isn't referenced, it doesn't actually get linked
         {
-            Maybe<Test> maybe = null;
+            Result<Test> result = Result.Ok(new Test());
 
-            System.Diagnostics.Debug.WriteLine(string.Format("maybe HasValue: {0} hasNoValue {1}", maybe.HasValue, maybe.HasNoValue));
+            System.Diagnostics.Debug.WriteLine(string.Format("result IsSuccess: {0} IsFailure: {1}", result.IsSuccess, result.IsFailure));
         }
     }
 }

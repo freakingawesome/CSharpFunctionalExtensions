@@ -7,16 +7,15 @@ namespace CSharpFunctionalExtensions.Examples.ResultExtensions
             var gateway = new EmailGateway();
 
             return GetById(id)
-                .ToResult("Customer with such Id is not found: " + id)
                 .Ensure(customer => customer.CanBePromoted(), "The customer has the highest status possible")
                 .OnSuccess(customer => customer.Promote())
                 .OnSuccess(customer => gateway.SendPromotionNotification(customer.Email))
                 .OnBoth(result => result.IsSuccess ? "Ok" : result.Error);
         }
 
-        public Maybe<Customer> GetById(long id)
+        public Result<Customer> GetById(long id)
         {
-            return new Customer();
+            return Result.Ok(new Customer());
         }
 
         public class Customer
