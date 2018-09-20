@@ -1,3 +1,4 @@
+using System.Linq;
 using FluentAssertions;
 using Xunit;
 
@@ -35,7 +36,7 @@ namespace CSharpFunctionalExtensions.Tests.ResultTests
             string myError = string.Empty;
 
             Result<MyClass> myResult = Result.Fail<MyClass>(_errorMessage);
-            myResult.OnFailure(error => myError = error);
+            myResult.OnFailure(error => myError = error.First().Error);
 
             myError.Should().Be(_errorMessage);
         }

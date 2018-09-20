@@ -6,15 +6,33 @@ using System.Runtime.Serialization;
 
 namespace CSharpFunctionalExtensions
 {
-    internal class ResultCommonLogic<TError>
+    internal sealed class ResultCommonLogic
     {
         public bool IsFailure { get; }
         public bool IsSuccess => !IsFailure;
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private readonly TError _error;
+        private readonly ValidationError[] _error;
 
-        public TError Error
+        [DebuggerStepThrough]
+        public ResultCommonLogic(bool isFailure, IEnumerable<ValidationError> error)
+        {
+            if (isFailure)
+            {
+                if (error == null || !error.Any())
+                    throw new ArgumentNullException(nameof(error), ResultMessages.ErrorObjectIsNotProvidedForFailure);
+            }
+            else
+            {
+                if (error != null && error.Any())
+                    throw new ArgumentException(ResultMessages.ErrorObjectIsProvidedForSuccess, nameof(error));
+            }
+
+            IsFailure = isFailure;
+            _error = error?.ToArray() ?? new ValidationError[0];
+        }
+
+        public IEnumerable<ValidationError> Error
         {
             [DebuggerStepThrough]
             get
@@ -26,37 +44,16 @@ namespace CSharpFunctionalExtensions
             }
         }
 
-        [DebuggerStepThrough]
-        public ResultCommonLogic(bool isFailure, TError error)
-        {
-            if (isFailure)
-            {
-                if (error == null)
-                    throw new ArgumentNullException(nameof(error), ResultMessages.ErrorObjectIsNotProvidedForFailure);
-            }
-            else
-            {
-                if (error != null)
-                    throw new ArgumentException(ResultMessages.ErrorObjectIsProvidedForSuccess, nameof(error));
-            }
-
-            IsFailure = isFailure;
-            _error = error;
-        }
-
         public void GetObjectData(SerializationInfo oInfo, StreamingContext oContext)
         {
             oInfo.AddValue("IsFailure", IsFailure);
             oInfo.AddValue("IsSuccess", IsSuccess);
             if (IsFailure)
             {
-                oInfo.AddValue("Error", Error);
+                oInfo.AddValue("Error", _error, typeof(ValidationError[]));
             }
         }
-    }
 
-    internal sealed class ResultCommonLogic : ResultCommonLogic<string>
-    {
         [DebuggerStepThrough]
         public static ResultCommonLogic Create(bool isFailure, string error)
         {
@@ -65,17 +62,25 @@ namespace CSharpFunctionalExtensions
                 if (string.IsNullOrEmpty(error))
                     throw new ArgumentNullException(nameof(error), ResultMessages.ErrorMessageIsNotProvidedForFailure);
             }
+
+            return Create(isFailure, new[] { new ValidationError(error) });
+        }
+
+        [DebuggerStepThrough]
+        public static ResultCommonLogic Create(bool isFailure, IEnumerable<ValidationError> error)
+        {
+            if (isFailure)
+            {
+                if (error == null || !error.Any())
+                    throw new ArgumentNullException(nameof(error), ResultMessages.ErrorMessageIsNotProvidedForFailure);
+            }
             else
             {
-                if (error != null)
+                if (error != null && error.Any())
                     throw new ArgumentException(ResultMessages.ErrorMessageIsProvidedForSuccess, nameof(error));
             }
 
             return new ResultCommonLogic(isFailure, error);
-        }
-
-        public ResultCommonLogic(bool isFailure, string error) : base(isFailure, error)
-        {
         }
     }
 
@@ -95,7 +100,7 @@ namespace CSharpFunctionalExtensions
 
     public struct Result : ISerializable
     {
-        private static readonly Result OkResult = new Result(false, null);
+        private static readonly Result OkResult = new Result(false, new ValidationError[0]);
 
         void ISerializable.GetObjectData(SerializationInfo oInfo, StreamingContext oContext)
         {
@@ -107,10 +112,16 @@ namespace CSharpFunctionalExtensions
 
         public bool IsFailure => _logic.IsFailure;
         public bool IsSuccess => _logic.IsSuccess;
-        public string Error => _logic.Error;
+        public IEnumerable<ValidationError> Error => _logic.Error;
 
         [DebuggerStepThrough]
         private Result(bool isFailure, string error)
+        {
+            _logic = ResultCommonLogic.Create(isFailure, error);
+        }
+
+        [DebuggerStepThrough]
+        private Result(bool isFailure, IEnumerable<ValidationError> error)
         {
             _logic = ResultCommonLogic.Create(isFailure, error);
         }
@@ -128,13 +139,25 @@ namespace CSharpFunctionalExtensions
         }
 
         [DebuggerStepThrough]
+        public static Result Fail(IEnumerable<ValidationError> error)
+        {
+            return new Result(true, error);
+        }
+
+        [DebuggerStepThrough]
         public static Result<T> Ok<T>(T value)
         {
-            return new Result<T>(false, value, null);
+            return new Result<T>(false, value, new ValidationError[0]);
         }
 
         [DebuggerStepThrough]
         public static Result<T> Fail<T>(string error)
+        {
+            return new Result<T>(true, default(T), error);
+        }
+
+        [DebuggerStepThrough]
+        public static Result<T> Fail<T>(IEnumerable<ValidationError> error)
         {
             return new Result<T>(true, default(T), error);
         }
@@ -203,7 +226,7 @@ namespace CSharpFunctionalExtensions
 
         public bool IsFailure => _logic.IsFailure;
         public bool IsSuccess => _logic.IsSuccess;
-        public string Error => _logic.Error;
+        public IEnumerable<ValidationError> Error => _logic.Error;
 
         void ISerializable.GetObjectData(SerializationInfo oInfo, StreamingContext oContext)
         {
@@ -232,6 +255,16 @@ namespace CSharpFunctionalExtensions
 
         [DebuggerStepThrough]
         internal Result(bool isFailure, T value, string error)
+        {
+            if (!isFailure && value == null)
+                throw new ArgumentNullException(nameof(value));
+
+            _logic = ResultCommonLogic.Create(isFailure, error);
+            _value = value;
+        }
+
+        [DebuggerStepThrough]
+        internal Result(bool isFailure, T value, IEnumerable<ValidationError> error)
         {
             if (!isFailure && value == null)
                 throw new ArgumentNullException(nameof(value));

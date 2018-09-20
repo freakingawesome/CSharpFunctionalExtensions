@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace CSharpFunctionalExtensions
 {
@@ -148,7 +149,7 @@ namespace CSharpFunctionalExtensions
             return result;
         }
 
-        public static Result<T> OnFailure<T>(this Result<T> result, Action<string> action)
+        public static Result<T> OnFailure<T>(this Result<T> result, Action<IEnumerable<ValidationError>> action)
         {
             if (result.IsFailure)
             {
@@ -158,7 +159,7 @@ namespace CSharpFunctionalExtensions
             return result;
         }
 
-        public static Result OnFailure(this Result result, Action<string> action)
+        public static Result OnFailure(this Result result, Action<IEnumerable<ValidationError>> action)
         {
             if (result.IsFailure)
             {

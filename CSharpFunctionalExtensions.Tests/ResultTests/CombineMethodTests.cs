@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+using System.Linq;
+using FluentAssertions;
 using Xunit;
 
 
@@ -16,7 +17,7 @@ namespace CSharpFunctionalExtensions.Tests.ResultTests
             Result result = Result.FirstFailureOrSuccess(result1, result2, result3);
 
             result.IsFailure.Should().BeTrue();
-            result.Error.Should().Be("Failure 1");
+            result.Error.First().Error.Should().Be("Failure 1");
         }
 
         [Fact]

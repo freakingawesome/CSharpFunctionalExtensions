@@ -43,7 +43,8 @@ namespace CSharpFunctionalExtensions.Tests.ResultTests
             var serializationInfo = new SerializationInfo(typeof(Result), new FormatterConverter());
             serializableObject.GetObjectData(serializationInfo, new StreamingContext());
 
-            serializationInfo.GetString(nameof(Result.Error)).Should().Be(_errorMessage);
+            serializationInfo.GetValue(nameof(Result.Error), typeof(ValidationError[]))
+                .ShouldBeEquivalentTo(new ValidationError[] { new ValidationError(_errorMessage) });
         }
 
         [Fact]

@@ -43,7 +43,7 @@ namespace CSharpFunctionalExtensions.Tests.ResultTests
 
             Action action = () =>
             {
-                string error = result.Error;
+                var error = result.Error;
             };
 
             action.ShouldThrow<InvalidOperationException>();
@@ -56,7 +56,7 @@ namespace CSharpFunctionalExtensions.Tests.ResultTests
 
             Action action = () =>
             {
-                string error = result.Error;
+                var error = result.Error;
             };
 
             action.ShouldThrow<InvalidOperationException>();

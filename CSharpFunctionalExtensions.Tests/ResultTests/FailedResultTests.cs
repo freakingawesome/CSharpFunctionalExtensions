@@ -1,4 +1,6 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using FluentAssertions;
 using Xunit;
 
@@ -12,7 +14,7 @@ namespace CSharpFunctionalExtensions.Tests.ResultTests
         {
             Result result = Result.Fail("Error message");
 
-            result.Error.Should().Be("Error message");
+            result.Error.First().Error.Should().Be("Error message");
             result.IsFailure.Should().Be(true);
             result.IsSuccess.Should().Be(false);
         }
@@ -22,7 +24,7 @@ namespace CSharpFunctionalExtensions.Tests.ResultTests
         {
             Result<MyClass> result = Result.Fail<MyClass>("Error message");
 
-            result.Error.Should().Be("Error message");
+            result.Error.First().Error.Should().Be("Error message");
             result.IsFailure.Should().Be(true);
             result.IsSuccess.Should().Be(false);
         }
@@ -40,15 +42,23 @@ namespace CSharpFunctionalExtensions.Tests.ResultTests
         [Fact]
         public void Cannot_create_without_error_message()
         {
-            Action action1 = () => { Result.Fail(null); };
+            Action action1 = () => { Result.Fail((string)null); };
             Action action2 = () => { Result.Fail(string.Empty); };
-            Action action3 = () => { Result.Fail<MyClass>(null); };
+            Action action3 = () => { Result.Fail<MyClass>((string)null); };
             Action action4 = () => { Result.Fail<MyClass>(string.Empty); };
+            Action action5 = () => { Result.Fail((IEnumerable<ValidationError>)null); };
+            Action action6 = () => { Result.Fail(new ValidationError[0]); };
+            Action action7 = () => { Result.Fail<MyClass>((IEnumerable<ValidationError>)null); };
+            Action action8 = () => { Result.Fail<MyClass>(new ValidationError[0]); };
 
             action1.ShouldThrow<ArgumentNullException>();
             action2.ShouldThrow<ArgumentNullException>();
             action3.ShouldThrow<ArgumentNullException>();
             action4.ShouldThrow<ArgumentNullException>();
+            action5.ShouldThrow<ArgumentNullException>();
+            action6.ShouldThrow<ArgumentNullException>();
+            action7.ShouldThrow<ArgumentNullException>();
+            action8.ShouldThrow<ArgumentNullException>();
         }
 
 

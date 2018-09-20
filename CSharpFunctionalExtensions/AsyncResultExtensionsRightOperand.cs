@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace CSharpFunctionalExtensions
@@ -160,7 +161,7 @@ namespace CSharpFunctionalExtensions
             return result;
         }
 
-        public static async Task<Result<T>> OnFailure<T>(this Result<T> result, Func<string, Task> func, bool continueOnCapturedContext = true)
+        public static async Task<Result<T>> OnFailure<T>(this Result<T> result, Func<IEnumerable<ValidationError>, Task> func, bool continueOnCapturedContext = true)
         {
             if (result.IsFailure)
             {

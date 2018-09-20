@@ -1,4 +1,7 @@
-﻿using System.Runtime.Serialization;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.Serialization;
 
 namespace CSharpFunctionalExtensions
 {
@@ -25,5 +28,11 @@ namespace CSharpFunctionalExtensions
 
         public string Field { get { return field ?? string.Empty; } }
         public string Error { get { return error ?? string.Empty; } }
+    }
+
+    public static class ValidationErrorExtensions
+    {
+        public static string FormatString(this IEnumerable<ValidationError> self, string fieldFormatString = "[{0}] ", string separator = "\n") =>
+            string.Join(separator, self.Select(x => string.IsNullOrEmpty(x.Field) ? x.Error : string.Format(fieldFormatString, x.Field) + x.Error));
     }
 }
