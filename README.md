@@ -1,11 +1,22 @@
 # FreakingAwesome.ValidationResult
 
-This is a forked and slimmed down version of the `Result` and `Result<T>` types from [Functional Extensions for
+[![GitHub license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/vkhorikov/CSharpFunctionalExtensions/blob/master/LICENSE)
+
+This is a forked and slimmed down version of the `Result` and `Result<Ok>` types from [Functional Extensions for
 C#](https://github.com/vkhorikov/CSharpFunctionalExtensions) which swap in a list of Validation Errors for the single
 string error message found in the original, where each Validation Error consists of an optional field name and error
 message, reminiscent of ASP.Net MVC ModelState error reporting paradigm.
 
-[![GitHub license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/vkhorikov/CSharpFunctionalExtensions/blob/master/LICENSE)
+## Motivation
+
+The `Result` structs and extensions are a great foundation, but the single string `Error` inside `Result` and
+`Result<Ok>` where too limiting, while `Result<Ok, Err>` extensions were incomplete.
+
+Adding all the extra functionality to `Result<Ok, Err>` just proved too cumbersome and was just to unwieldy in the end,
+so I instead chose to swap out the internals of `Result` `Result<Ok>` with an `Error` value I have found useful in the
+past, renaming to `ValidationResult` with the intention of being able to still make use of the more generalized `Result`
+and `Result<Ok>` classes by referencing
+[`CSharpFunctionalExtensions`](https://github.com/vkhorikov/CSharpFunctionalExtensions) via nuget.
 
 ## Immutable ValidationErrors
 
