@@ -155,6 +155,8 @@ namespace CSharpFunctionalExtensions
             return Ok();
         }
 
+        // TODO: Reimplement Combine for ValidationResult
+        /*
         /// <summary>
         /// Returns failure which combined from all failures in the <paramref name="results"/> list. Error messages are separated by <paramref name="errorMessagesSeparator"/>. 
         /// If there is no failure returns success.
@@ -191,6 +193,7 @@ namespace CSharpFunctionalExtensions
             Result[] untyped = results.Select(result => (Result)result).ToArray();
             return Combine(errorMessagesSeparator, untyped);
         }
+        */
     }
     
     public struct Result<T> : ISerializable

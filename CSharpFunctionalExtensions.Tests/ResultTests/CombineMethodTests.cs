@@ -31,6 +31,8 @@ namespace CSharpFunctionalExtensions.Tests.ResultTests
             result.IsSuccess.Should().BeTrue();
         }
 
+        // TODO: Reinstate Combine
+        /*
         [Fact]
         public void Combine_combines_all_errors_together()
         {
@@ -76,5 +78,6 @@ namespace CSharpFunctionalExtensions.Tests.ResultTests
 
             result.IsSuccess.Should().BeFalse();
         }
+        */
     }
 }
