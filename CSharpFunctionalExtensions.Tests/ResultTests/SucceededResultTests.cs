@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using FluentAssertions;
 using Xunit;
 
@@ -22,18 +22,6 @@ namespace CSharpFunctionalExtensions.Tests.ResultTests
             var myClass = new MyClass();
 
             Result<MyClass> result = Result.Ok(myClass);
-
-            result.IsFailure.Should().Be(false);
-            result.IsSuccess.Should().Be(true);
-            result.Value.Should().Be(myClass);
-        }
-
-        [Fact]
-        public void Can_create_a_generic_version_with_a_generic_error()
-        {
-            var myClass = new MyClass();
-
-            Result<MyClass, MyClass> result = Result.Ok<MyClass, MyClass>(myClass);
 
             result.IsFailure.Should().Be(false);
             result.IsSuccess.Should().Be(true);

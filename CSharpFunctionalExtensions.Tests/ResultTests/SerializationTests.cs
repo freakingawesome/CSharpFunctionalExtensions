@@ -1,4 +1,4 @@
-﻿using System.Runtime.Serialization;
+using System.Runtime.Serialization;
 using FluentAssertions;
 using Xunit;
 
@@ -58,21 +58,6 @@ namespace CSharpFunctionalExtensions.Tests.ResultTests
 
             serializationInfo.GetValue(nameof(Result<SerializationTestObject>.Value), typeof(SerializationTestObject))
                 .Should().Be(language);
-        }
-
-        [Fact]
-        public void GetObjectData_adds_error_object_in_serialization_context_when_failure_result()
-        {
-            SerializationTestObject errorObject = new SerializationTestObject { Number = 500, String = "Error message" };
-            Result<object, SerializationTestObject> failResult = Result.Fail<object, SerializationTestObject>(errorObject);
-            ISerializable serializableObject = failResult;
-
-            var serializationInfo = new SerializationInfo(typeof(Result), new FormatterConverter());
-            serializableObject.GetObjectData(serializationInfo, new StreamingContext());
-
-            serializationInfo
-                .GetValue(nameof(Result<object, SerializationTestObject>.Error), typeof(SerializationTestObject))
-                .Should().Be(errorObject);
         }
     }
 

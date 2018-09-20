@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -139,18 +139,6 @@ namespace CSharpFunctionalExtensions
             return new Result<T>(true, default(T), error);
         }
 
-        [DebuggerStepThrough]
-        public static Result<TValue, TError> Ok<TValue, TError>(TValue value) where TError : class
-        {
-            return new Result<TValue, TError>(false, value, default(TError));
-        }
-
-        [DebuggerStepThrough]
-        public static Result<TValue, TError> Fail<TValue, TError>(TError error) where TError : class
-        {
-            return new Result<TValue, TError>(true, default(TValue), error);
-        }
-
         /// <summary>
         /// Returns first failure in the list of <paramref name="results"/>. If there is no failure returns success.
         /// </summary>
@@ -255,67 +243,6 @@ namespace CSharpFunctionalExtensions
                 return Result.Ok();
             else
                 return Result.Fail(result.Error);
-        }
-    }
-
-    public struct Result<TValue, TError> : ISerializable
-    {
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private readonly ResultCommonLogic<TError> _logic;
-
-        public bool IsFailure => _logic.IsFailure;
-        public bool IsSuccess => _logic.IsSuccess;
-        public TError Error => _logic.Error;
-
-        void ISerializable.GetObjectData(SerializationInfo oInfo, StreamingContext oContext)
-        {
-            _logic.GetObjectData(oInfo, oContext);
-
-            if (IsSuccess)
-            {
-                oInfo.AddValue("Value", Value);
-            }
-        }
-
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private readonly TValue _value;
-
-        public TValue Value
-        {
-            [DebuggerStepThrough]
-            get
-            {
-                if (!IsSuccess)
-                    throw new InvalidOperationException("There is no value for failure.");
-
-                return _value;
-            }
-        }
-
-        [DebuggerStepThrough]
-        internal Result(bool isFailure, TValue value, TError error)
-        {
-            if (!isFailure && value == null)
-                throw new ArgumentNullException(nameof(value));
-
-            _logic = new ResultCommonLogic<TError>(isFailure, error);
-            _value = value;
-        }
-
-        public static implicit operator Result(Result<TValue, TError> result)
-        {
-            if (result.IsSuccess)
-                return Result.Ok();
-            else
-                return Result.Fail(result.Error.ToString());
-        }
-
-        public static implicit operator Result<TValue>(Result<TValue, TError> result)
-        {
-            if (result.IsSuccess)
-                return Result.Ok(result.Value);
-            else
-                return Result.Fail<TValue>(result.Error.ToString());
         }
     }
 }
