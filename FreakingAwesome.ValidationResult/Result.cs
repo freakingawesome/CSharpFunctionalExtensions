@@ -218,6 +218,7 @@ namespace FreakingAwesome.ValidationResult
             return Fail(failedResults.Select(x => x.Error).Concat());
         }
 
+#if !NET40
         /// <summary>
         /// Returns failure which combined from all failures in the <paramref name="results"/> list.
         /// If there is no failure returns success.
@@ -229,6 +230,7 @@ namespace FreakingAwesome.ValidationResult
             await Task.WhenAll(results);
             return Combine(results.Select(x => x.Result).ToArray());
         }
+#endif
 
         /// <summary>
         /// Returns failure which combined from all failures in the <paramref name="results"/> list.
@@ -242,6 +244,7 @@ namespace FreakingAwesome.ValidationResult
             return Combine(results.Select(r => r.Upcast()).ToArray());
         }
 
+#if !NET40
         /// <summary>
         /// Returns failure which combined from all failures in the <paramref name="results"/> list.
         /// If there is no failure returns success. This version of Combine() drops successful values.
@@ -254,6 +257,7 @@ namespace FreakingAwesome.ValidationResult
             await Task.WhenAll(results);
             return Combine(results.Select(r => r.Result.Upcast()).ToArray());
         }
+#endif
 
         /// <summary>
         /// Returns failure which combined from all failures in the <paramref name="results"/> list.
@@ -273,6 +277,7 @@ namespace FreakingAwesome.ValidationResult
             return Ok<IList<T>>(results.Select(r => r.Value).ToList());
         }
 
+#if !NET40
         /// <summary>
         /// Returns failure which combined from all failures in the <paramref name="results"/> list.
         /// If there is no failure returns success and all the success values.
@@ -291,6 +296,7 @@ namespace FreakingAwesome.ValidationResult
 
             return Ok<IList<T>>(results.Select(r => r.Result.Value).ToList());
         }
+#endif
     }
     
     [Serializable]
