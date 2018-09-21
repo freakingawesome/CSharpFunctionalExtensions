@@ -1,5 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace FreakingAwesome.ValidationResult
 {
@@ -61,24 +64,30 @@ namespace FreakingAwesome.ValidationResult
             return func();
         }
 
-        public static ValidationResult<T> Ensure<T>(this ValidationResult<T> result, Func<T, bool> predicate, string errorMessage)
+        public static ValidationResult<T> Ensure<T>(this ValidationResult<T> result, Func<T, bool> predicate, string errorMessage) =>
+            Ensure(result, predicate, "", errorMessage);
+
+        public static ValidationResult<T> Ensure<T>(this ValidationResult<T> result, Func<T, bool> predicate, string field, string error)
         {
             if (result.IsFailure)
                 return ValidationResult.Fail<T>(result.Error);
 
             if (!predicate(result.Value))
-                return ValidationResult.Fail<T>(errorMessage);
+                return ValidationResult.Fail<T>(field, error);
 
             return ValidationResult.Ok(result.Value);
         }
 
-        public static ValidationResult Ensure(this ValidationResult result, Func<bool> predicate, string errorMessage)
+        public static ValidationResult Ensure(this ValidationResult result, Func<bool> predicate, string errorMessage) =>
+            Ensure(result, predicate, "", errorMessage);
+
+        public static ValidationResult Ensure(this ValidationResult result, Func<bool> predicate, string field, string error)
         {
             if (result.IsFailure)
                 return ValidationResult.Fail(result.Error);
 
             if (!predicate())
-                return ValidationResult.Fail(errorMessage);
+                return ValidationResult.Fail(field, error);
 
             return ValidationResult.Ok();
         }
@@ -168,5 +177,106 @@ namespace FreakingAwesome.ValidationResult
 
             return result;
         }
+ 
+        /// <summary>
+        /// Returns failure which combined from all failures in the <paramref name="results"/> list.
+        /// If there is no failure returns success.
+        /// </summary>
+        /// <param name="results">List of results.</param>
+        [DebuggerStepThrough]
+        public static ValidationResult Combine(this ValidationResult self, params ValidationResult[] results)
+        {
+            return ValidationResult.Combine(new ValidationResult[] { self }.Concat(results).ToArray());
+        }
+
+#if !NET40
+        /// <summary>
+        /// Returns failure which combined from all failures in the <paramref name="results"/> list.
+        /// If there is no failure returns success.
+        /// </summary>
+        /// <param name="results">List of results.</param>
+        [DebuggerStepThrough]
+        public static async Task<ValidationResult> CombineAsync(this ValidationResult self, params Task<ValidationResult>[] results)
+        {
+            return await ValidationResult.CombineAsync(new Task<ValidationResult>[] { Task.FromResult(self) }.Concat(results).ToArray());
+        }
+#endif
+
+        /// <summary>
+        /// Returns failure which combined from all failures in the <paramref name="results"/> list.
+        /// If there is no failure returns success. This version of Combine() drops successful values.
+        /// If you want to retain the successful values,use CombineRetainValues();
+        /// </summary>
+        /// <param name="results">List of results.</param>
+        [DebuggerStepThrough]
+        public static ValidationResult<T> Combine<T>(this ValidationResult<T> self, params ValidationResult[] results)
+        {
+            if (self.IsFailure)
+            {
+                return self;
+            }
+
+            return ValidationResult.Combine(results).Map(self.Value);
+        }
+
+        /// <summary>
+        /// Returns failure which combined from all failures in the <paramref name="results"/> list.
+        /// If there is no failure returns success. This version of Combine() drops successful values.
+        /// If you want to retain the successful values,use CombineRetainValues();
+        /// </summary>
+        /// <param name="results">List of results.</param>
+        [DebuggerStepThrough]
+        public static ValidationResult Combine<T>(this ValidationResult<T> self, params ValidationResult<T>[] results)
+        {
+            return ValidationResult.Combine(new ValidationResult<T>[] { self }.Concat(results).ToArray());
+        }
+
+#if !NET40
+        /// <summary>
+        /// Returns failure which combined from all failures in the <paramref name="results"/> list.
+        /// If there is no failure returns success. This version of Combine() drops successful values.
+        /// If you want to retain the successful values,use CombineRetainValues();
+        /// </summary>
+        /// <param name="results">List of results.</param>
+        [DebuggerStepThrough]
+        public static async Task<ValidationResult> CombineAsync<T>(this ValidationResult<T> self, params Task<ValidationResult<T>>[] results)
+        {
+            return await ValidationResult.CombineAsync(new Task<ValidationResult<T>>[] { Task.FromResult(self) }.Concat(results).ToArray());
+        }
+
+        /// <summary>
+        /// Returns failure which combined from all failures in the <paramref name="results"/> list.
+        /// If there is no failure returns success. This version of Combine() drops successful values.
+        /// If you want to retain the successful values,use CombineRetainValues();
+        /// </summary>
+        /// <param name="results">List of results.</param>
+        [DebuggerStepThrough]
+        public static async Task<ValidationResult<T>> CombineAsync<T>(this ValidationResult<T> self, params Task<ValidationResult>[] results) =>
+            self.IsFailure ? self : Combine(self, await ValidationResult.CombineAsync(results));
+#endif
+
+        /// <summary>
+        /// Returns failure which combined from all failures in the <paramref name="results"/> list.
+        /// If there is no failure returns success and all the success values.
+        /// </summary>
+        /// <param name="results">List of results.</param>
+        [DebuggerStepThrough]
+        public static ValidationResult<IList<T>> CombineRetainValues<T>(this ValidationResult<T> self, params ValidationResult<T>[] results)
+        {
+            return ValidationResult.CombineRetainValues(new ValidationResult<T>[] { self }.Concat(results).ToArray());
+        }
+
+#if !NET40
+        /// <summary>
+        /// Returns failure which combined from all failures in the <paramref name="results"/> list.
+        /// If there is no failure returns success and all the success values.
+        /// </summary>
+        /// <param name="results">List of results.</param>
+        [DebuggerStepThrough]
+        public static async Task<ValidationResult<IList<T>>> CombineRetainValuesAsync<T>(this ValidationResult<T> self, params Task<ValidationResult<T>>[] results)
+        {
+            return await ValidationResult.CombineRetainValuesAsync(new Task<ValidationResult<T>>[] { Task.FromResult(self) }.Concat(results).ToArray());
+        }
+#endif
     }
 }

@@ -66,7 +66,10 @@ namespace FreakingAwesome.ValidationResult
         }
 
         [DebuggerStepThrough]
-        public static ValidationResultCommonLogic Create(bool isFailure, string error)
+        public static ValidationResultCommonLogic Create(bool isFailure, string error) => Create(isFailure, "", error);
+
+        [DebuggerStepThrough]
+        public static ValidationResultCommonLogic Create(bool isFailure, string field, string error)
         {
             if (isFailure)
             {
@@ -74,7 +77,7 @@ namespace FreakingAwesome.ValidationResult
                     throw new ArgumentNullException(nameof(error), ValidationResultMessages.ErrorMessageIsNotProvidedForFailure);
             }
 
-            return Create(isFailure, new[] { new ValidationError(error) });
+            return Create(isFailure, new[] { new ValidationError(field, error) });
         }
 
         [DebuggerStepThrough]
@@ -127,9 +130,12 @@ namespace FreakingAwesome.ValidationResult
         public IEnumerable<ValidationError> Error => _logic.Error;
 
         [DebuggerStepThrough]
-        private ValidationResult(bool isFailure, string error)
+        private ValidationResult(bool isFailure, string error) : this(isFailure, "", error) { }
+
+        [DebuggerStepThrough]
+        private ValidationResult(bool isFailure, string field, string error)
         {
-            _logic = ValidationResultCommonLogic.Create(isFailure, error);
+            _logic = ValidationResultCommonLogic.Create(isFailure, field, error);
         }
 
         [DebuggerStepThrough]
@@ -153,7 +159,13 @@ namespace FreakingAwesome.ValidationResult
         [DebuggerStepThrough]
         public static ValidationResult Fail(string error)
         {
-            return new ValidationResult(true, error);
+            return Fail("", error);
+        }
+
+        [DebuggerStepThrough]
+        public static ValidationResult Fail(string field, string error)
+        {
+            return new ValidationResult(true, field, error);
         }
 
         [DebuggerStepThrough]
@@ -181,6 +193,12 @@ namespace FreakingAwesome.ValidationResult
         }
 
         [DebuggerStepThrough]
+        public static ValidationResult<T> Fail<T>(string field, string error)
+        {
+            return new ValidationResult<T>(true, default(T), field, error);
+        }
+
+        [DebuggerStepThrough]
         public static ValidationResult<T> Fail<T>(IEnumerable<ValidationError> error)
         {
             return new ValidationResult<T>(true, default(T), error);
@@ -201,6 +219,16 @@ namespace FreakingAwesome.ValidationResult
 
             return Ok();
         }
+
+        /// <summary>
+        /// Transforms the success value
+        /// </summary>
+        public ValidationResult<T> Map<T>(Func<T> f) => IsSuccess ? Ok(f()) : Fail<T>(Error);
+
+        /// <summary>
+        /// Transforms the success value
+        /// </summary>
+        public ValidationResult<T> Map<T>(T val) => IsSuccess ? Ok(val) : Fail<T>(Error);
 
         /// <summary>
         /// Returns failure which combined from all failures in the <paramref name="results"/> list.
@@ -345,12 +373,15 @@ namespace FreakingAwesome.ValidationResult
         }
 
         [DebuggerStepThrough]
-        internal ValidationResult(bool isFailure, T value, string error)
+        internal ValidationResult(bool isFailure, T value, string error) : this(isFailure, value, "", error) { }
+
+        [DebuggerStepThrough]
+        internal ValidationResult(bool isFailure, T value, string field, string error)
         {
             if (!isFailure && value == null)
                 throw new ArgumentNullException(nameof(value));
 
-            _logic = ValidationResultCommonLogic.Create(isFailure, error);
+            _logic = ValidationResultCommonLogic.Create(isFailure, field, error);
             _value = value;
         }
 
