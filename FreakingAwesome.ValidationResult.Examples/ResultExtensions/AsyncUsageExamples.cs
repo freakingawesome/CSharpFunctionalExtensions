@@ -26,14 +26,14 @@ namespace FreakingAwesome.ValidationResult.Examples.ResultExtensions
                 .OnBothAsync(result => result.IsSuccess ? "Ok" : result.Error.FormatString());
         }
 
-        public Task<Result<Customer>> GetByIdAsync(long id)
+        public Task<ValidationResult<Customer>> GetByIdAsync(long id)
         {
-            return Task.FromResult(Result.Ok(new Customer()));
+            return Task.FromResult(ValidationResult.Ok(new Customer()));
         }
 
-        public Result<Customer> GetById(long id)
+        public ValidationResult<Customer> GetById(long id)
         {
-            return Result.Ok(new Customer());
+            return ValidationResult.Ok(new Customer());
         }
 
         public class Customer
@@ -61,14 +61,14 @@ namespace FreakingAwesome.ValidationResult.Examples.ResultExtensions
 
         public class EmailGateway
         {
-            public Result SendPromotionNotification(string email)
+            public ValidationResult SendPromotionNotification(string email)
             {
-                return Result.Ok();
+                return ValidationResult.Ok();
             }
 
-            public Task<Result> SendPromotionNotificationAsync(string email)
+            public Task<ValidationResult> SendPromotionNotificationAsync(string email)
             {
-                return Task.FromResult(Result.Ok());
+                return Task.FromResult(ValidationResult.Ok());
             }
         }
     }

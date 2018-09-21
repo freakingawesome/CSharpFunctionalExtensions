@@ -15,39 +15,39 @@ namespace FreakingAwesome.ValidationResult.Tests.ResultTests
         [Fact]
         public void GetObjectData_sets_correct_statuses_on_success_result()
         {
-            Result okResult = Result.Ok();
+            ValidationResult okResult = ValidationResult.Ok();
             ISerializable serializableObject = okResult;
 
-            var serializationInfo = new SerializationInfo(typeof(Result), new FormatterConverter());
+            var serializationInfo = new SerializationInfo(typeof(ValidationResult), new FormatterConverter());
             serializableObject.GetObjectData(serializationInfo, new StreamingContext());
 
-            serializationInfo.GetBoolean(nameof(Result.IsSuccess)).Should().BeTrue();
-            serializationInfo.GetBoolean(nameof(Result.IsFailure)).Should().BeFalse();
+            serializationInfo.GetBoolean(nameof(ValidationResult.IsSuccess)).Should().BeTrue();
+            serializationInfo.GetBoolean(nameof(ValidationResult.IsFailure)).Should().BeFalse();
         }
 
         [Fact]
         public void GetObjectData_sets_correct_statuses_on_failure_result()
         {
-            Result okResult = Result.Fail(_errorMessage);
+            ValidationResult okResult = ValidationResult.Fail(_errorMessage);
             ISerializable serializableObject = okResult;
 
-            var serializationInfo = new SerializationInfo(typeof(Result), new FormatterConverter());
+            var serializationInfo = new SerializationInfo(typeof(ValidationResult), new FormatterConverter());
             serializableObject.GetObjectData(serializationInfo, new StreamingContext());
 
-            serializationInfo.GetBoolean(nameof(Result.IsSuccess)).Should().BeFalse();
-            serializationInfo.GetBoolean(nameof(Result.IsFailure)).Should().BeTrue();
+            serializationInfo.GetBoolean(nameof(ValidationResult.IsSuccess)).Should().BeFalse();
+            serializationInfo.GetBoolean(nameof(ValidationResult.IsFailure)).Should().BeTrue();
         }
 
         [Fact]
         public void GetObjectData_adds_message_in_context_on_failure_result()
         {
-            Result okResult = Result.Fail(_errorMessage);
+            ValidationResult okResult = ValidationResult.Fail(_errorMessage);
             ISerializable serializableObject = okResult;
 
-            var serializationInfo = new SerializationInfo(typeof(Result), new FormatterConverter());
+            var serializationInfo = new SerializationInfo(typeof(ValidationResult), new FormatterConverter());
             serializableObject.GetObjectData(serializationInfo, new StreamingContext());
 
-            serializationInfo.GetValue(nameof(Result.Error), typeof(ValidationError[]))
+            serializationInfo.GetValue(nameof(ValidationResult.Error), typeof(ValidationError[]))
                 .ShouldBeEquivalentTo(new ValidationError[] { new ValidationError(_errorMessage) });
         }
 
@@ -55,23 +55,23 @@ namespace FreakingAwesome.ValidationResult.Tests.ResultTests
         public void GetObjectData_of_generic_result_adds_object_in_context_when_success_result()
         {
             SerializationTestObject language = new SerializationTestObject { Number = 232, String = "C#" };
-            Result<SerializationTestObject> okResult = Result.Ok(language);
+            ValidationResult<SerializationTestObject> okResult = ValidationResult.Ok(language);
             ISerializable serializableObject = okResult;
 
-            var serializationInfo = new SerializationInfo(typeof(Result), new FormatterConverter());
+            var serializationInfo = new SerializationInfo(typeof(ValidationResult), new FormatterConverter());
             serializableObject.GetObjectData(serializationInfo, new StreamingContext());
 
-            serializationInfo.GetValue(nameof(Result<SerializationTestObject>.Value), typeof(SerializationTestObject))
+            serializationInfo.GetValue(nameof(ValidationResult<SerializationTestObject>.Value), typeof(SerializationTestObject))
                 .Should().Be(language);
         }
 
         [Fact]
         public void BinarySerialization_gives_back_a_resembling_success_result()
         {
-            Result okResult = Result.Ok();
+            ValidationResult okResult = ValidationResult.Ok();
             using (MemoryStream stream = SerializeToStream(okResult))
             {
-                var actual = (Result)DeserializeFromStream(stream);
+                var actual = (ValidationResult)DeserializeFromStream(stream);
 
                 actual.IsSuccess.Should().BeTrue();
                 actual.IsFailure.Should().BeFalse();
@@ -81,10 +81,10 @@ namespace FreakingAwesome.ValidationResult.Tests.ResultTests
         [Fact]
         public void BinarySerialization_gives_back_a_resembling_failure_result()
         {
-            Result okResult = Result.Fail(_errorMessage);
+            ValidationResult okResult = ValidationResult.Fail(_errorMessage);
             using (MemoryStream stream = SerializeToStream(okResult))
             {
-                var actual = (Result)DeserializeFromStream(stream);
+                var actual = (ValidationResult)DeserializeFromStream(stream);
 
                 actual.IsSuccess.Should().BeFalse();
                 actual.IsFailure.Should().BeTrue();
@@ -96,10 +96,10 @@ namespace FreakingAwesome.ValidationResult.Tests.ResultTests
         public void BinarySerialization_generic_gives_back_a_resembling_success_result()
         {
             SerializationTestObject language = new SerializationTestObject { Number = 232, String = "C#" };
-            Result<SerializationTestObject> okResult = Result.Ok(language);
+            ValidationResult<SerializationTestObject> okResult = ValidationResult.Ok(language);
             using (MemoryStream stream = SerializeToStream(okResult))
             {
-                var actual = (Result<SerializationTestObject>)DeserializeFromStream(stream);
+                var actual = (ValidationResult<SerializationTestObject>)DeserializeFromStream(stream);
 
                 actual.IsSuccess.Should().BeTrue();
                 actual.IsFailure.Should().BeFalse();
@@ -111,10 +111,10 @@ namespace FreakingAwesome.ValidationResult.Tests.ResultTests
         public void BinarySerialization_generic_gives_back_a_resembling_failure_result()
         {
             SerializationTestObject language = new SerializationTestObject { Number = 232, String = "C#" };
-            Result<SerializationTestObject> okResult = Result.Fail<SerializationTestObject>(_errorMessage);
+            ValidationResult<SerializationTestObject> okResult = ValidationResult.Fail<SerializationTestObject>(_errorMessage);
             using (MemoryStream stream = SerializeToStream(okResult))
             {
-                var actual = (Result<SerializationTestObject>)DeserializeFromStream(stream);
+                var actual = (ValidationResult<SerializationTestObject>)DeserializeFromStream(stream);
 
                 actual.IsSuccess.Should().BeFalse();
                 actual.IsFailure.Should().BeTrue();

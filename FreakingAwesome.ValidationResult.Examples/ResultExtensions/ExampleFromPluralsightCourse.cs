@@ -13,9 +13,9 @@ namespace FreakingAwesome.ValidationResult.Examples.ResultExtensions
                 .OnBoth(result => result.IsSuccess ? "Ok" : result.Error.FormatString());
         }
 
-        public Result<Customer> GetById(long id)
+        public ValidationResult<Customer> GetById(long id)
         {
-            return Result.Ok(new Customer());
+            return ValidationResult.Ok(new Customer());
         }
 
         public class Customer
@@ -38,9 +38,9 @@ namespace FreakingAwesome.ValidationResult.Examples.ResultExtensions
 
         public class EmailGateway
         {
-            public Result SendPromotionNotification(string email)
+            public ValidationResult SendPromotionNotification(string email)
             {
-                return Result.Ok();
+                return ValidationResult.Ok();
             }
         }
     }

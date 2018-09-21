@@ -13,7 +13,7 @@ namespace FreakingAwesome.ValidationResult.Tests.ResultTests
         {
             bool myBool = false;
 
-            Result myResult = Result.Fail(_errorMessage);
+            ValidationResult myResult = ValidationResult.Fail(_errorMessage);
             myResult.OnFailure(() => myBool = true);
 
             myBool.Should().Be(true);
@@ -24,7 +24,7 @@ namespace FreakingAwesome.ValidationResult.Tests.ResultTests
         {
             bool myBool = false;
 
-            Result<MyClass> myResult = Result.Fail<MyClass>(_errorMessage);
+            ValidationResult<MyClass> myResult = ValidationResult.Fail<MyClass>(_errorMessage);
             myResult.OnFailure(() => myBool = true);
 
             myBool.Should().Be(true);
@@ -35,7 +35,7 @@ namespace FreakingAwesome.ValidationResult.Tests.ResultTests
         {
             string myError = string.Empty;
 
-            Result<MyClass> myResult = Result.Fail<MyClass>(_errorMessage);
+            ValidationResult<MyClass> myResult = ValidationResult.Fail<MyClass>(_errorMessage);
             myResult.OnFailure(error => myError = error.First().Error);
 
             myError.Should().Be(_errorMessage);

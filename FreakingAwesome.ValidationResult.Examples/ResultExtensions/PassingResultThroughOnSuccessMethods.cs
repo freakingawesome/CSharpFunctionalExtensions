@@ -7,36 +7,36 @@ namespace FreakingAwesome.ValidationResult.Examples.ResultExtensions
     {
         public void Example1()
         {
-            Result<DateTime> result = FunctionInt()
+            ValidationResult<DateTime> result = FunctionInt()
                 .OnSuccess(x => FunctionString(x))
                 .OnSuccess(x => FunctionDateTime(x));
         }
 
         public void Example2()
         {
-            Result<DateTime> result = FunctionInt()
+            ValidationResult<DateTime> result = FunctionInt()
                 .OnSuccess(() => FunctionString())
                 .OnSuccess(x => FunctionDateTime(x));
         }
 
-        private Result<int> FunctionInt()
+        private ValidationResult<int> FunctionInt()
         {
-            return Result.Ok(1);
+            return ValidationResult.Ok(1);
         }
 
-        private Result<string> FunctionString(int intValue)
+        private ValidationResult<string> FunctionString(int intValue)
         {
-            return Result.Ok("Ok");
+            return ValidationResult.Ok("Ok");
         }
 
-        private Result<string> FunctionString()
+        private ValidationResult<string> FunctionString()
         {
-            return Result.Ok("Ok");
+            return ValidationResult.Ok("Ok");
         }
 
-        private Result<DateTime> FunctionDateTime(string stringValue)
+        private ValidationResult<DateTime> FunctionDateTime(string stringValue)
         {
-            return Result.Ok(DateTime.Now);
+            return ValidationResult.Ok(DateTime.Now);
         }
     }
 }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace FreakingAwesome.ValidationResult
 {
-    internal sealed class ResultCommonLogic
+    internal sealed class ValidationResultCommonLogic
     {
         public bool IsFailure { get; }
         public bool IsSuccess => !IsFailure;
@@ -16,17 +16,17 @@ namespace FreakingAwesome.ValidationResult
         private readonly IEnumerable<ValidationError> _error;
 
         [DebuggerStepThrough]
-        public ResultCommonLogic(bool isFailure, IEnumerable<ValidationError> error)
+        public ValidationResultCommonLogic(bool isFailure, IEnumerable<ValidationError> error)
         {
             if (isFailure)
             {
                 if (error == null || !error.Any())
-                    throw new ArgumentNullException(nameof(error), ResultMessages.ErrorObjectIsNotProvidedForFailure);
+                    throw new ArgumentNullException(nameof(error), ValidationResultMessages.ErrorObjectIsNotProvidedForFailure);
             }
             else
             {
                 if (error != null && error.Any())
-                    throw new ArgumentException(ResultMessages.ErrorObjectIsProvidedForSuccess, nameof(error));
+                    throw new ArgumentException(ValidationResultMessages.ErrorObjectIsProvidedForSuccess, nameof(error));
             }
 
             IsFailure = isFailure;
@@ -34,7 +34,7 @@ namespace FreakingAwesome.ValidationResult
         }
 
         [DebuggerStepThrough]
-        public ResultCommonLogic(SerializationInfo oInfo, StreamingContext oContext)
+        public ValidationResultCommonLogic(SerializationInfo oInfo, StreamingContext oContext)
         {
             IsFailure = oInfo.GetBoolean("IsFailure");
             if (IsFailure)
@@ -66,36 +66,36 @@ namespace FreakingAwesome.ValidationResult
         }
 
         [DebuggerStepThrough]
-        public static ResultCommonLogic Create(bool isFailure, string error)
+        public static ValidationResultCommonLogic Create(bool isFailure, string error)
         {
             if (isFailure)
             {
                 if (string.IsNullOrEmpty(error))
-                    throw new ArgumentNullException(nameof(error), ResultMessages.ErrorMessageIsNotProvidedForFailure);
+                    throw new ArgumentNullException(nameof(error), ValidationResultMessages.ErrorMessageIsNotProvidedForFailure);
             }
 
             return Create(isFailure, new[] { new ValidationError(error) });
         }
 
         [DebuggerStepThrough]
-        public static ResultCommonLogic Create(bool isFailure, IEnumerable<ValidationError> error)
+        public static ValidationResultCommonLogic Create(bool isFailure, IEnumerable<ValidationError> error)
         {
             if (isFailure)
             {
                 if (error == null || !error.Any())
-                    throw new ArgumentNullException(nameof(error), ResultMessages.ErrorMessageIsNotProvidedForFailure);
+                    throw new ArgumentNullException(nameof(error), ValidationResultMessages.ErrorMessageIsNotProvidedForFailure);
             }
             else
             {
                 if (error != null && error.Any())
-                    throw new ArgumentException(ResultMessages.ErrorMessageIsProvidedForSuccess, nameof(error));
+                    throw new ArgumentException(ValidationResultMessages.ErrorMessageIsProvidedForSuccess, nameof(error));
             }
 
-            return new ResultCommonLogic(isFailure, error);
+            return new ValidationResultCommonLogic(isFailure, error);
         }
     }
 
-    internal static class ResultMessages
+    internal static class ValidationResultMessages
     {
         public static readonly string ErrorObjectIsNotProvidedForFailure =
             "You have tried to create a failure result, but error object appeared to be null, please review the code, generating error object.";
@@ -110,9 +110,9 @@ namespace FreakingAwesome.ValidationResult
 
 
     [Serializable]
-    public struct Result : ISerializable
+    public struct ValidationResult : ISerializable
     {
-        private static readonly Result OkResult = new Result(false, new ValidationError[0]);
+        private static readonly ValidationResult OkResult = new ValidationResult(false, new ValidationError[0]);
 
         void ISerializable.GetObjectData(SerializationInfo oInfo, StreamingContext oContext)
         {
@@ -120,70 +120,70 @@ namespace FreakingAwesome.ValidationResult
         }
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private readonly ResultCommonLogic _logic;
+        private readonly ValidationResultCommonLogic _logic;
 
         public bool IsFailure => _logic.IsFailure;
         public bool IsSuccess => _logic.IsSuccess;
         public IEnumerable<ValidationError> Error => _logic.Error;
 
         [DebuggerStepThrough]
-        private Result(bool isFailure, string error)
+        private ValidationResult(bool isFailure, string error)
         {
-            _logic = ResultCommonLogic.Create(isFailure, error);
+            _logic = ValidationResultCommonLogic.Create(isFailure, error);
         }
 
         [DebuggerStepThrough]
-        private Result(bool isFailure, IEnumerable<ValidationError> error)
+        private ValidationResult(bool isFailure, IEnumerable<ValidationError> error)
         {
-            _logic = ResultCommonLogic.Create(isFailure, error);
+            _logic = ValidationResultCommonLogic.Create(isFailure, error);
         }
 
         [DebuggerStepThrough]
-        private Result(SerializationInfo info, StreamingContext context)
+        private ValidationResult(SerializationInfo info, StreamingContext context)
         {
-            _logic = new ResultCommonLogic(info, context);
+            _logic = new ValidationResultCommonLogic(info, context);
         }
 
         [DebuggerStepThrough]
-        public static Result Ok()
+        public static ValidationResult Ok()
         {
             return OkResult;
         }
 
         [DebuggerStepThrough]
-        public static Result Fail(string error)
+        public static ValidationResult Fail(string error)
         {
-            return new Result(true, error);
+            return new ValidationResult(true, error);
         }
 
         [DebuggerStepThrough]
-        public static Result Fail(params string[] errors)
+        public static ValidationResult Fail(params string[] errors)
         {
-            return new Result(true, errors.Select(e => new ValidationError(e)));
+            return new ValidationResult(true, errors.Select(e => new ValidationError(e)));
         }
 
         [DebuggerStepThrough]
-        public static Result Fail(IEnumerable<ValidationError> error)
+        public static ValidationResult Fail(IEnumerable<ValidationError> error)
         {
-            return new Result(true, error);
+            return new ValidationResult(true, error);
         }
 
         [DebuggerStepThrough]
-        public static Result<T> Ok<T>(T value)
+        public static ValidationResult<T> Ok<T>(T value)
         {
-            return new Result<T>(false, value, new ValidationError[0]);
+            return new ValidationResult<T>(false, value, new ValidationError[0]);
         }
 
         [DebuggerStepThrough]
-        public static Result<T> Fail<T>(string error)
+        public static ValidationResult<T> Fail<T>(string error)
         {
-            return new Result<T>(true, default(T), error);
+            return new ValidationResult<T>(true, default(T), error);
         }
 
         [DebuggerStepThrough]
-        public static Result<T> Fail<T>(IEnumerable<ValidationError> error)
+        public static ValidationResult<T> Fail<T>(IEnumerable<ValidationError> error)
         {
-            return new Result<T>(true, default(T), error);
+            return new ValidationResult<T>(true, default(T), error);
         }
 
         /// <summary>
@@ -191,9 +191,9 @@ namespace FreakingAwesome.ValidationResult
         /// </summary>
         /// <param name="results">List of results.</param>
         [DebuggerStepThrough]
-        public static Result FirstFailureOrSuccess(params Result[] results)
+        public static ValidationResult FirstFailureOrSuccess(params ValidationResult[] results)
         {
-            foreach (Result result in results)
+            foreach (ValidationResult result in results)
             {
                 if (result.IsFailure)
                     return Fail(result.Error);
@@ -208,9 +208,9 @@ namespace FreakingAwesome.ValidationResult
         /// </summary>
         /// <param name="results">List of results.</param>
         [DebuggerStepThrough]
-        public static Result Combine(params Result[] results)
+        public static ValidationResult Combine(params ValidationResult[] results)
         {
-            List<Result> failedResults = results.Where(x => x.IsFailure).ToList();
+            List<ValidationResult> failedResults = results.Where(x => x.IsFailure).ToList();
 
             if (!failedResults.Any())
                 return Ok();
@@ -225,7 +225,7 @@ namespace FreakingAwesome.ValidationResult
         /// </summary>
         /// <param name="results">List of results.</param>
         [DebuggerStepThrough]
-        public static async Task<Result> CombineAsync(params Task<Result>[] results)
+        public static async Task<ValidationResult> CombineAsync(params Task<ValidationResult>[] results)
         {
             await Task.WhenAll(results);
             return Combine(results.Select(x => x.Result).ToArray());
@@ -239,7 +239,7 @@ namespace FreakingAwesome.ValidationResult
         /// </summary>
         /// <param name="results">List of results.</param>
         [DebuggerStepThrough]
-        public static Result Combine<T>(params Result<T>[] results)
+        public static ValidationResult Combine<T>(params ValidationResult<T>[] results)
         {
             return Combine(results.Select(r => r.Upcast()).ToArray());
         }
@@ -252,7 +252,7 @@ namespace FreakingAwesome.ValidationResult
         /// </summary>
         /// <param name="results">List of results.</param>
         [DebuggerStepThrough]
-        public static async Task<Result> CombineAsync<T>(params Task<Result<T>>[] results)
+        public static async Task<ValidationResult> CombineAsync<T>(params Task<ValidationResult<T>>[] results)
         {
             await Task.WhenAll(results);
             return Combine(results.Select(r => r.Result.Upcast()).ToArray());
@@ -265,7 +265,7 @@ namespace FreakingAwesome.ValidationResult
         /// </summary>
         /// <param name="results">List of results.</param>
         [DebuggerStepThrough]
-        public static Result<IList<T>> CombineRetainValues<T>(params Result<T>[] results)
+        public static ValidationResult<IList<T>> CombineRetainValues<T>(params ValidationResult<T>[] results)
         {
             var untyped = Combine(results);
 
@@ -284,7 +284,7 @@ namespace FreakingAwesome.ValidationResult
         /// </summary>
         /// <param name="results">List of results.</param>
         [DebuggerStepThrough]
-        public static async Task<Result<IList<T>>> CombineRetainValuesAsync<T>(params Task<Result<T>>[] results)
+        public static async Task<ValidationResult<IList<T>>> CombineRetainValuesAsync<T>(params Task<ValidationResult<T>>[] results)
         {
             await Task.WhenAll(results);
             var untyped = Combine(results.Select(r => r.Result).ToArray());
@@ -300,10 +300,10 @@ namespace FreakingAwesome.ValidationResult
     }
     
     [Serializable]
-    public struct Result<T> : ISerializable
+    public struct ValidationResult<T> : ISerializable
     {
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private readonly ResultCommonLogic _logic;
+        private readonly ValidationResultCommonLogic _logic;
 
         public bool IsFailure => _logic.IsFailure;
         public bool IsSuccess => _logic.IsSuccess;
@@ -322,12 +322,12 @@ namespace FreakingAwesome.ValidationResult
         /// <summary>
         /// Converts to the non-generic form of Result, essentially dropping the Value if there is a success.
         /// </summary>
-        public Result Upcast() => IsSuccess ? Result.Ok() : Result.Fail(Error);
+        public ValidationResult Upcast() => IsSuccess ? ValidationResult.Ok() : ValidationResult.Fail(Error);
 
         /// <summary>
         /// Transforms the success value
         /// </summary>
-        public Result<K> Map<K>(Func<T, K> f) => IsSuccess ? Result.Ok(f(Value)) : Result.Fail<K>(Error);
+        public ValidationResult<K> Map<K>(Func<T, K> f) => IsSuccess ? ValidationResult.Ok(f(Value)) : ValidationResult.Fail<K>(Error);
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private readonly T _value;
@@ -345,29 +345,29 @@ namespace FreakingAwesome.ValidationResult
         }
 
         [DebuggerStepThrough]
-        internal Result(bool isFailure, T value, string error)
+        internal ValidationResult(bool isFailure, T value, string error)
         {
             if (!isFailure && value == null)
                 throw new ArgumentNullException(nameof(value));
 
-            _logic = ResultCommonLogic.Create(isFailure, error);
+            _logic = ValidationResultCommonLogic.Create(isFailure, error);
             _value = value;
         }
 
         [DebuggerStepThrough]
-        internal Result(bool isFailure, T value, IEnumerable<ValidationError> error)
+        internal ValidationResult(bool isFailure, T value, IEnumerable<ValidationError> error)
         {
             if (!isFailure && value == null)
                 throw new ArgumentNullException(nameof(value));
 
-            _logic = ResultCommonLogic.Create(isFailure, error);
+            _logic = ValidationResultCommonLogic.Create(isFailure, error);
             _value = value;
         }
 
         [DebuggerStepThrough]
-        private Result(SerializationInfo info, StreamingContext context)
+        private ValidationResult(SerializationInfo info, StreamingContext context)
         {
-            _logic = new ResultCommonLogic(info, context);
+            _logic = new ValidationResultCommonLogic(info, context);
 
             if (_logic.IsSuccess)
             {
@@ -379,12 +379,12 @@ namespace FreakingAwesome.ValidationResult
             }
         }
 
-        public static implicit operator Result(Result<T> result)
+        public static implicit operator ValidationResult(ValidationResult<T> result)
         {
             if (result.IsSuccess)
-                return Result.Ok();
+                return ValidationResult.Ok();
             else
-                return Result.Fail(result.Error);
+                return ValidationResult.Fail(result.Error);
         }
     }
 }

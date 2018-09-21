@@ -18,9 +18,9 @@ namespace FreakingAwesome.ValidationResult.Examples.ResultExtensions
                 .OnBoth(result => result.IsSuccess ? "OK" : result.Error.FormatString());
         }
 
-        private Result<Customer> GetById(long id)
+        private ValidationResult<Customer> GetById(long id)
         {
-            return Result.Ok(new Customer());
+            return ValidationResult.Ok(new Customer());
         }
 
         private class Customer
@@ -33,9 +33,9 @@ namespace FreakingAwesome.ValidationResult.Examples.ResultExtensions
 
         private class PaymentGateway
         {
-            public Result ChargePayment(Customer customer, decimal moneyAmount)
+            public ValidationResult ChargePayment(Customer customer, decimal moneyAmount)
             {
-                return Result.Ok();
+                return ValidationResult.Ok();
             }
 
             public void RollbackLastTransaction()
@@ -51,9 +51,9 @@ namespace FreakingAwesome.ValidationResult.Examples.ResultExtensions
 
         private class Database
         {
-            public Result Save(Customer customer)
+            public ValidationResult Save(Customer customer)
             {
-                return Result.Ok();
+                return ValidationResult.Ok();
             }
         }
     }
