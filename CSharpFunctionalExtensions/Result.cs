@@ -156,6 +156,12 @@ namespace CSharpFunctionalExtensions
         }
 
         [DebuggerStepThrough]
+        public static Result Fail(params string[] errors)
+        {
+            return new Result(true, errors.Select(e => new ValidationError(e)));
+        }
+
+        [DebuggerStepThrough]
         public static Result Fail(IEnumerable<ValidationError> error)
         {
             return new Result(true, error);
@@ -195,45 +201,51 @@ namespace CSharpFunctionalExtensions
             return Ok();
         }
 
-        // TODO: Reimplement Combine for ValidationResult
-        /*
         /// <summary>
-        /// Returns failure which combined from all failures in the <paramref name="results"/> list. Error messages are separated by <paramref name="errorMessagesSeparator"/>. 
+        /// Returns failure which combined from all failures in the <paramref name="results"/> list.
         /// If there is no failure returns success.
         /// </summary>
-        /// <param name="errorMessagesSeparator">Separator for error messages.</param>
         /// <param name="results">List of results.</param>
         [DebuggerStepThrough]
-        public static Result Combine(string errorMessagesSeparator, params Result[] results)
+        public static Result Combine(params Result[] results)
         {
             List<Result> failedResults = results.Where(x => x.IsFailure).ToList();
 
             if (!failedResults.Any())
                 return Ok();
 
-            string errorMessage = string.Join(errorMessagesSeparator, failedResults.Select(x => x.Error).ToArray());
-            return Fail(errorMessage);
+            return Fail(failedResults.Select(x => x.Error).Concat());
         }
 
-        [DebuggerStepThrough]
-        public static Result Combine(params Result[] results)
-        {
-            return Combine(", ", results);
-        }
-
+        /// <summary>
+        /// Returns failure which combined from all failures in the <paramref name="results"/> list.
+        /// If there is no failure returns success. This version of Combine() drops successful values.
+        /// If you want to retain the successful values,use CombineRetainValues();
+        /// </summary>
+        /// <param name="results">List of results.</param>
         [DebuggerStepThrough]
         public static Result Combine<T>(params Result<T>[] results)
         {
-            return Combine(", ", results);
+            return Combine(results.Select(r => r.Upcast()).ToArray());
         }
 
+        /// <summary>
+        /// Returns failure which combined from all failures in the <paramref name="results"/> list.
+        /// If there is no failure returns success and all the success values.
+        /// </summary>
+        /// <param name="results">List of results.</param>
         [DebuggerStepThrough]
-        public static Result Combine<T>(string errorMessagesSeparator, params Result<T>[] results)
+        public static Result<IList<T>> CombineRetainValues<T>(params Result<T>[] results)
         {
-            Result[] untyped = results.Select(result => (Result)result).ToArray();
-            return Combine(errorMessagesSeparator, untyped);
+            var untyped = Combine(results);
+
+            if (untyped.IsFailure)
+            {
+                return Fail<IList<T>>(untyped.Error);
+            }
+
+            return Ok<IList<T>>(results.Select(r => r.Value).ToList());
         }
-        */
     }
     
     [Serializable]
@@ -255,6 +267,16 @@ namespace CSharpFunctionalExtensions
                 oInfo.AddValue("Value", Value);
             }
         }
+
+        /// <summary>
+        /// Converts to the non-generic form of Result, essentially dropping the Value if there is a success.
+        /// </summary>
+        public Result Upcast() => IsSuccess ? Result.Ok() : Result.Fail(Error);
+
+        /// <summary>
+        /// Transforms the success value
+        /// </summary>
+        public Result<K> Map<K>(Func<T, K> f) => IsSuccess ? Result.Ok(f(Value)) : Result.Fail<K>(Error);
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private readonly T _value;
