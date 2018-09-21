@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.Serialization;
+using System.Threading.Tasks;
 
 namespace CSharpFunctionalExtensions
 {
@@ -219,6 +220,18 @@ namespace CSharpFunctionalExtensions
 
         /// <summary>
         /// Returns failure which combined from all failures in the <paramref name="results"/> list.
+        /// If there is no failure returns success.
+        /// </summary>
+        /// <param name="results">List of results.</param>
+        [DebuggerStepThrough]
+        public static async Task<Result> CombineAsync(params Task<Result>[] results)
+        {
+            await Task.WhenAll(results);
+            return Combine(results.Select(x => x.Result).ToArray());
+        }
+
+        /// <summary>
+        /// Returns failure which combined from all failures in the <paramref name="results"/> list.
         /// If there is no failure returns success. This version of Combine() drops successful values.
         /// If you want to retain the successful values,use CombineRetainValues();
         /// </summary>
@@ -227,6 +240,19 @@ namespace CSharpFunctionalExtensions
         public static Result Combine<T>(params Result<T>[] results)
         {
             return Combine(results.Select(r => r.Upcast()).ToArray());
+        }
+
+        /// <summary>
+        /// Returns failure which combined from all failures in the <paramref name="results"/> list.
+        /// If there is no failure returns success. This version of Combine() drops successful values.
+        /// If you want to retain the successful values,use CombineRetainValues();
+        /// </summary>
+        /// <param name="results">List of results.</param>
+        [DebuggerStepThrough]
+        public static async Task<Result> CombineAsync<T>(params Task<Result<T>>[] results)
+        {
+            await Task.WhenAll(results);
+            return Combine(results.Select(r => r.Result.Upcast()).ToArray());
         }
 
         /// <summary>
@@ -245,6 +271,25 @@ namespace CSharpFunctionalExtensions
             }
 
             return Ok<IList<T>>(results.Select(r => r.Value).ToList());
+        }
+
+        /// <summary>
+        /// Returns failure which combined from all failures in the <paramref name="results"/> list.
+        /// If there is no failure returns success and all the success values.
+        /// </summary>
+        /// <param name="results">List of results.</param>
+        [DebuggerStepThrough]
+        public static async Task<Result<IList<T>>> CombineRetainValuesAsync<T>(params Task<Result<T>>[] results)
+        {
+            await Task.WhenAll(results);
+            var untyped = Combine(results.Select(r => r.Result).ToArray());
+
+            if (untyped.IsFailure)
+            {
+                return Fail<IList<T>>(untyped.Error);
+            }
+
+            return Ok<IList<T>>(results.Select(r => r.Result.Value).ToList());
         }
     }
     
