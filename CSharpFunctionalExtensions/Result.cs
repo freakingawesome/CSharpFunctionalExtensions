@@ -12,7 +12,7 @@ namespace CSharpFunctionalExtensions
         public bool IsSuccess => !IsFailure;
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private readonly ValidationError[] _error;
+        private readonly IEnumerable<ValidationError> _error;
 
         [DebuggerStepThrough]
         public ResultCommonLogic(bool isFailure, IEnumerable<ValidationError> error)
@@ -29,7 +29,17 @@ namespace CSharpFunctionalExtensions
             }
 
             IsFailure = isFailure;
-            _error = error?.ToArray() ?? new ValidationError[0];
+            _error = error ?? new ValidationError[0];
+        }
+
+        [DebuggerStepThrough]
+        public ResultCommonLogic(SerializationInfo oInfo, StreamingContext oContext)
+        {
+            IsFailure = oInfo.GetBoolean("IsFailure");
+            if (IsFailure)
+            {
+                _error = oInfo.GetValue("Error", typeof(ValidationError[])) as ValidationError[];
+            }
         }
 
         public IEnumerable<ValidationError> Error
@@ -50,7 +60,7 @@ namespace CSharpFunctionalExtensions
             oInfo.AddValue("IsSuccess", IsSuccess);
             if (IsFailure)
             {
-                oInfo.AddValue("Error", _error, typeof(ValidationError[]));
+                oInfo.AddValue("Error", _error?.ToArray(), typeof(ValidationError[]));
             }
         }
 
@@ -98,6 +108,7 @@ namespace CSharpFunctionalExtensions
     }
 
 
+    [Serializable]
     public struct Result : ISerializable
     {
         private static readonly Result OkResult = new Result(false, new ValidationError[0]);
@@ -124,6 +135,12 @@ namespace CSharpFunctionalExtensions
         private Result(bool isFailure, IEnumerable<ValidationError> error)
         {
             _logic = ResultCommonLogic.Create(isFailure, error);
+        }
+
+        [DebuggerStepThrough]
+        private Result(SerializationInfo info, StreamingContext context)
+        {
+            _logic = new ResultCommonLogic(info, context);
         }
 
         [DebuggerStepThrough]
@@ -219,6 +236,7 @@ namespace CSharpFunctionalExtensions
         */
     }
     
+    [Serializable]
     public struct Result<T> : ISerializable
     {
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -271,6 +289,21 @@ namespace CSharpFunctionalExtensions
 
             _logic = ResultCommonLogic.Create(isFailure, error);
             _value = value;
+        }
+
+        [DebuggerStepThrough]
+        private Result(SerializationInfo info, StreamingContext context)
+        {
+            _logic = new ResultCommonLogic(info, context);
+
+            if (_logic.IsSuccess)
+            {
+                _value = (T)info.GetValue("Value", typeof(T));
+            }
+            else
+            {
+                _value = default(T);
+            }
         }
 
         public static implicit operator Result(Result<T> result)
