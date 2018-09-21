@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 
-namespace CSharpFunctionalExtensions
+namespace FreakingAwesome.ValidationResult
 {
     /// <summary>
     /// Extentions for async operations where the task appears in the both operands

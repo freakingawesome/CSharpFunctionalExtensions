@@ -1,4 +1,4 @@
-using CSharpFunctionalExtensions;
+using FreakingAwesome.ValidationResult;
 
 namespace LinkTest
 {

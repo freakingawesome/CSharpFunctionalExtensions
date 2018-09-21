@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace CSharpFunctionalExtensions
+namespace FreakingAwesome.ValidationResult
 {
     public static class ResultExtensions
     {

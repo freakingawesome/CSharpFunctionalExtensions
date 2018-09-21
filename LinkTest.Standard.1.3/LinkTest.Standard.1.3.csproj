@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CSharpFunctionalExtensions\CSharpFunctionalExtensions.csproj" />
+    <ProjectReference Include="..\FreakingAwesome.ValidationResult\FreakingAwesome.ValidationResult.csproj" />
   </ItemGroup>
 
 </Project>

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
 
-namespace CSharpFunctionalExtensions
+namespace FreakingAwesome.ValidationResult
 {
     internal sealed class ResultCommonLogic
     {

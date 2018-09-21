@@ -1,4 +1,4 @@
-namespace CSharpFunctionalExtensions.Examples.ResultExtensions
+namespace FreakingAwesome.ValidationResult.Examples.ResultExtensions
 {
     public class ExampleFromPluralsightCourse
     {

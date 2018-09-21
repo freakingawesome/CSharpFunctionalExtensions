@@ -2,13 +2,13 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;netstandard1.3;net40;net45;net461</TargetFrameworks>
-    <PackageId>CSharpFunctionalExtensions</PackageId>
+    <PackageId>FreakingAwesome.ValidationResult</PackageId>
     <PackageVersion>1.10.0</PackageVersion>
     <Authors>Vladimir Khorikov</Authors>
-    <Description>CSharpFunctionalExtensions - functional extensions for C#.</Description>
+    <Description>FreakingAwesome.ValidationResult - functional extensions for C#.</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageTags>C# Functional</PackageTags>
-    <PackageLicenseUrl>https://github.com/vkhorikov/CSharpFunctionalExtensions/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageLicenseUrl>https://github.com/vkhorikov/FreakingAwesome.ValidationResult/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://www.pluralsight.com/courses/csharp-applying-functional-principles</PackageProjectUrl>
     <NeutralLanguage>en-US</NeutralLanguage>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
@@ -30,19 +30,19 @@
 
   <!-- Set titles so the dlls are distinguishable from each other -->
   <PropertyGroup Condition="'$(TargetFramework)'=='net40'">
-    <AssemblyTitle>CSharpFunctionalExtensions .NET 4.0</AssemblyTitle>
+    <AssemblyTitle>FreakingAwesome.ValidationResult .NET 4.0</AssemblyTitle>
   </PropertyGroup>
   <PropertyGroup Condition="'$(TargetFramework)'=='net45'">
-    <AssemblyTitle>CSharpFunctionalExtensions .NET 4.5</AssemblyTitle>
+    <AssemblyTitle>FreakingAwesome.ValidationResult .NET 4.5</AssemblyTitle>
   </PropertyGroup>
   <PropertyGroup Condition="'$(TargetFramework)'=='net461'">
-    <AssemblyTitle>CSharpFunctionalExtensions .NET 4.6.1</AssemblyTitle>
+    <AssemblyTitle>FreakingAwesome.ValidationResult .NET 4.6.1</AssemblyTitle>
   </PropertyGroup>
   <PropertyGroup Condition="'$(TargetFramework)'=='netstandard1.3'">
-    <AssemblyTitle>CSharpFunctionalExtensions .NET Standard 1.3</AssemblyTitle>
+    <AssemblyTitle>FreakingAwesome.ValidationResult .NET Standard 1.3</AssemblyTitle>
   </PropertyGroup>
   <PropertyGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
-    <AssemblyTitle>CSharpFunctionalExtensions .NET Standard 2.0</AssemblyTitle>
+    <AssemblyTitle>FreakingAwesome.ValidationResult .NET Standard 2.0</AssemblyTitle>
   </PropertyGroup>
 
 </Project>

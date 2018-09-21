@@ -5,7 +5,7 @@ using FluentAssertions;
 using Xunit;
 
 
-namespace CSharpFunctionalExtensions.Tests.ResultTests
+namespace FreakingAwesome.ValidationResult.Tests.ResultTests
 {
     public class FailedResultTests
     {
