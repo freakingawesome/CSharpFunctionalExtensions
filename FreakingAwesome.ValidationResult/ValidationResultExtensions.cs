@@ -128,15 +128,9 @@ namespace FreakingAwesome.ValidationResult
             return result;
         }
 
-        public static T OnBoth<T>(this ValidationResult result, Func<ValidationResult, T> func)
-        {
-            return func(result);
-        }
+        public static T OnBoth<T>(this ValidationResult result, Func<ValidationResult, T> func) => func(result);
 
-        public static K OnBoth<T, K>(this ValidationResult<T> result, Func<ValidationResult<T>, K> func)
-        {
-            return func(result);
-        }
+        public static K OnBoth<T, K>(this ValidationResult<T> result, Func<ValidationResult<T>, K> func) => func(result);
 
         public static ValidationResult<T> OnFailure<T>(this ValidationResult<T> result, Action action)
         {
@@ -177,17 +171,15 @@ namespace FreakingAwesome.ValidationResult
 
             return result;
         }
- 
+
         /// <summary>
         /// Returns failure which combined from all failures in the <paramref name="results"/> list.
         /// If there is no failure returns success.
         /// </summary>
         /// <param name="results">List of results.</param>
         [DebuggerStepThrough]
-        public static ValidationResult Combine(this ValidationResult self, params ValidationResult[] results)
-        {
-            return ValidationResult.Combine(new ValidationResult[] { self }.Concat(results).ToArray());
-        }
+        public static ValidationResult Combine(this ValidationResult self, params ValidationResult[] results) =>
+            ValidationResult.Combine(new ValidationResult[] { self }.Concat(results).ToArray());
 
 #if !NET40
         /// <summary>
@@ -196,10 +188,8 @@ namespace FreakingAwesome.ValidationResult
         /// </summary>
         /// <param name="results">List of results.</param>
         [DebuggerStepThrough]
-        public static async Task<ValidationResult> CombineAsync(this ValidationResult self, params Task<ValidationResult>[] results)
-        {
-            return await ValidationResult.CombineAsync(new Task<ValidationResult>[] { Task.FromResult(self) }.Concat(results).ToArray());
-        }
+        public static async Task<ValidationResult> CombineAsync(this ValidationResult self, params Task<ValidationResult>[] results) =>
+            await ValidationResult.CombineAsync(new Task<ValidationResult>[] { Task.FromResult(self) }.Concat(results).ToArray());
 #endif
 
         /// <summary>
@@ -209,15 +199,8 @@ namespace FreakingAwesome.ValidationResult
         /// </summary>
         /// <param name="results">List of results.</param>
         [DebuggerStepThrough]
-        public static ValidationResult<T> Combine<T>(this ValidationResult<T> self, params ValidationResult[] results)
-        {
-            if (self.IsFailure)
-            {
-                return self;
-            }
-
-            return ValidationResult.Combine(results).Map(self.Value);
-        }
+        public static ValidationResult<T> Combine<T>(this ValidationResult<T> self, params ValidationResult[] results) =>
+            self.IsFailure ? self : ValidationResult.Combine(results).Map(self.Value);
 
         /// <summary>
         /// Returns failure which combined from all failures in the <paramref name="results"/> list.
@@ -226,10 +209,8 @@ namespace FreakingAwesome.ValidationResult
         /// </summary>
         /// <param name="results">List of results.</param>
         [DebuggerStepThrough]
-        public static ValidationResult Combine<T>(this ValidationResult<T> self, params ValidationResult<T>[] results)
-        {
-            return ValidationResult.Combine(new ValidationResult<T>[] { self }.Concat(results).ToArray());
-        }
+        public static ValidationResult Combine<T>(this ValidationResult<T> self, params ValidationResult<T>[] results) =>
+            ValidationResult.Combine(new ValidationResult<T>[] { self }.Concat(results).ToArray());
 
 #if !NET40
         /// <summary>
@@ -239,10 +220,8 @@ namespace FreakingAwesome.ValidationResult
         /// </summary>
         /// <param name="results">List of results.</param>
         [DebuggerStepThrough]
-        public static async Task<ValidationResult> CombineAsync<T>(this ValidationResult<T> self, params Task<ValidationResult<T>>[] results)
-        {
-            return await ValidationResult.CombineAsync(new Task<ValidationResult<T>>[] { Task.FromResult(self) }.Concat(results).ToArray());
-        }
+        public static async Task<ValidationResult> CombineAsync<T>(this ValidationResult<T> self, params Task<ValidationResult<T>>[] results) =>
+            await ValidationResult.CombineAsync(new Task<ValidationResult<T>>[] { Task.FromResult(self) }.Concat(results).ToArray());
 
         /// <summary>
         /// Returns failure which combined from all failures in the <paramref name="results"/> list.
@@ -261,10 +240,8 @@ namespace FreakingAwesome.ValidationResult
         /// </summary>
         /// <param name="results">List of results.</param>
         [DebuggerStepThrough]
-        public static ValidationResult<IList<T>> CombineRetainValues<T>(this ValidationResult<T> self, params ValidationResult<T>[] results)
-        {
-            return ValidationResult.CombineRetainValues(new ValidationResult<T>[] { self }.Concat(results).ToArray());
-        }
+        public static ValidationResult<IList<T>> CombineRetainValues<T>(this ValidationResult<T> self, params ValidationResult<T>[] results) =>
+            ValidationResult.CombineRetainValues(new ValidationResult<T>[] { self }.Concat(results).ToArray());
 
 #if !NET40
         /// <summary>
@@ -273,10 +250,8 @@ namespace FreakingAwesome.ValidationResult
         /// </summary>
         /// <param name="results">List of results.</param>
         [DebuggerStepThrough]
-        public static async Task<ValidationResult<IList<T>>> CombineRetainValuesAsync<T>(this ValidationResult<T> self, params Task<ValidationResult<T>>[] results)
-        {
-            return await ValidationResult.CombineRetainValuesAsync(new Task<ValidationResult<T>>[] { Task.FromResult(self) }.Concat(results).ToArray());
-        }
+        public static async Task<ValidationResult<IList<T>>> CombineRetainValuesAsync<T>(this ValidationResult<T> self, params Task<ValidationResult<T>>[] results) =>
+            await ValidationResult.CombineRetainValuesAsync(new Task<ValidationResult<T>>[] { Task.FromResult(self) }.Concat(results).ToArray());
 #endif
     }
 }
