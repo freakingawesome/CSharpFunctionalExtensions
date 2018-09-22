@@ -111,9 +111,8 @@ namespace FreakingAwesome.ValidationResult
         public static readonly string ErrorMessageIsProvidedForSuccess = "There should be no error message for success.";
     }
 
-
     [Serializable]
-    public struct ValidationResult : ISerializable
+    public struct ValidationResult : IResult, ISerializable
     {
         private static readonly ValidationResult OkResult = new ValidationResult(false, new ValidationError[0]);
 
@@ -326,9 +325,9 @@ namespace FreakingAwesome.ValidationResult
         }
 #endif
     }
-    
+
     [Serializable]
-    public struct ValidationResult<T> : ISerializable
+    public struct ValidationResult<T> : IResult, ISerializable
     {
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private readonly ValidationResultCommonLogic _logic;
