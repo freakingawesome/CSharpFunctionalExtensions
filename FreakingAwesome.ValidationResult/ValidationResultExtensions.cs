@@ -253,5 +253,47 @@ namespace FreakingAwesome.ValidationResult
         public static async Task<ValidationResult<IList<T>>> CombineRetainValuesAsync<T>(this ValidationResult<T> self, params Task<ValidationResult<T>>[] results) =>
             await ValidationResult.CombineRetainValuesAsync(new Task<ValidationResult<T>>[] { Task.FromResult(self) }.Concat(results).ToArray());
 #endif
+
+        /// <summary>
+        /// Joins the inner result
+        /// </summary>
+        [DebuggerStepThrough]
+        public static ValidationResult Join(this ValidationResult<ValidationResult> self) =>
+            self.IsFailure ? self : self.Value;
+
+        /// <summary>
+        /// Joins the inner result
+        /// </summary>
+        [DebuggerStepThrough]
+        public static ValidationResult<T> Join<T>(this ValidationResult<ValidationResult<T>> self) =>
+            self.IsFailure ? ValidationResult.Fail<T>(self.Error) : self.Value;
+
+        /// <summary>
+        /// Joins the inner result
+        /// </summary>
+        [DebuggerStepThrough]
+        public async static Task<ValidationResult> JoinAsync(this ValidationResult<Task<ValidationResult>> self) =>
+            self.IsFailure ? self : await self.Value;
+
+        /// <summary>
+        /// Joins the inner result
+        /// </summary>
+        [DebuggerStepThrough]
+        public async static Task<ValidationResult<T>> JoinAsync<T>(this ValidationResult<Task<ValidationResult<T>>> self) =>
+            self.IsFailure ? ValidationResult.Fail<T>(self.Error) : await self.Value;
+
+        /// <summary>
+        /// Joins the inner result
+        /// </summary>
+        [DebuggerStepThrough]
+        public async static Task<ValidationResult> JoinAsync(this Task<ValidationResult<Task<ValidationResult>>> self) =>
+            await JoinAsync(await self);
+
+        /// <summary>
+        /// Joins the inner result
+        /// </summary>
+        [DebuggerStepThrough]
+        public async static Task<ValidationResult<T>> JoinAsync<T>(this Task<ValidationResult<Task<ValidationResult<T>>>> self) =>
+            await JoinAsync(await self);
     }
 }
