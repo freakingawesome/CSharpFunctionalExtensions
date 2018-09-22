@@ -4,6 +4,10 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
+#if !NET40
+using System.Transactions;
+#endif
+
 namespace FreakingAwesome.ValidationResult
 {
     public static class ResultExtensions
@@ -295,5 +299,30 @@ namespace FreakingAwesome.ValidationResult
         [DebuggerStepThrough]
         public async static Task<ValidationResult<T>> JoinAsync<T>(this Task<ValidationResult<Task<ValidationResult<T>>>> self) =>
             await JoinAsync(await self);
+
+#if !NET40
+        [DebuggerStepThrough]
+        public async static Task<ValidationResult<K>> WithTransactionScopeAsync<T, K>(this Task<ValidationResult<T>> self, Func<T, Task<ValidationResult<K>>> f)
+        {
+            using (var trans = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+            {
+                var result = await self;
+
+                if (result.IsFailure)
+                {
+                    return ValidationResult.Fail<K>(result.Error);
+                }
+
+                var next = await f(result.Value);
+
+                if (next.IsSuccess)
+                {
+                    trans.Complete();
+                }
+
+                return next;
+            }
+        }
+#endif
     }
 }
