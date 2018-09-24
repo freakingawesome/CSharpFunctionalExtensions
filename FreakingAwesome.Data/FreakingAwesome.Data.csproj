@@ -1,23 +1,23 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;netstandard1.3;net40;net45;net461</TargetFrameworks>
     <PackageId>FreakingAwesome.Data</PackageId>
-    <PackageVersion>1.10.0</PackageVersion>
-    <Authors>Vladimir Khorikov</Authors>
-    <Description>FreakingAwesome.Data - functional extensions for C#.</Description>
+    <PackageVersion>1.0.0-alpha1</PackageVersion>
+    <Authors>Chad Gilbert</Authors>
+    <Description>FreakingAwesome.Data - C# Functional Result and Maybe types with lots of extensions</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageTags>C# Functional</PackageTags>
-    <PackageLicenseUrl>https://github.com/vkhorikov/FreakingAwesome.Data/blob/master/LICENSE</PackageLicenseUrl>
-    <PackageProjectUrl>https://www.pluralsight.com/courses/csharp-applying-functional-principles</PackageProjectUrl>
+    <PackageLicenseUrl>https://raw.githubusercontent.com/freakingawesome/FreakingAwesome.Data/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/freakingawesome/FreakingAwesome.Data</PackageProjectUrl>
     <NeutralLanguage>en-US</NeutralLanguage>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <Version>1.10.0</Version>
-    <AssemblyVersion>1.10.0.0</AssemblyVersion>
-    <FileVersion>1.10.0.0</FileVersion>
+    <Version>1.0.0-alpha1</Version>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
   </PropertyGroup>
 
-  <!-- .net 4.0 doesn't have async support and Microsoft.Bcl.Async doesn't work because of the interactions 
+  <!-- .net 4.0 doesn't have async support and Microsoft.Bcl.Async doesn't work because of the interactions
        between it's dependency chain and the multi-framework build. Howver the AsyncTargetingPack does. -->
   <ItemGroup Condition="'$(TargetFramework)' == 'net40'">
     <PackageReference Include="Microsoft.CompilerServices.AsyncTargetingPack" />
@@ -29,9 +29,6 @@
       <Version>4.5.0</Version>
     </PackageReference>
     <PackageReference Include="System.Runtime.Serialization.Formatters" Version="4.3.0" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'net45'">
     <PackageReference Include="System.ComponentModel.Annotations">
