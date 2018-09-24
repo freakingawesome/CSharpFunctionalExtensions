@@ -36,7 +36,7 @@ in a few different ways, as in using `Combine()` or `Join()`.
 
 A big thanks to the [Functional Extensions for C#](https://github.com/vkhorikov/CSharpFunctionalExtensions) project contributors!
 
- - [Vladimir Khorikov](https://github.com/vkhorikov)
+ * [Vladimir Khorikov](https://github.com/vkhorikov)
  * [Robert Sęk](https://github.com/robosek)
  * [Sergey Solomentsev](https://github.com/SergAtGitHub)
  * [Malcolm J Harwood](https://github.com/mjharwood)
