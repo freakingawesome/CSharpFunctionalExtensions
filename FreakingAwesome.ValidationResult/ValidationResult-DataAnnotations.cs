@@ -27,6 +27,9 @@ namespace FreakingAwesome.ValidationResult
             return result;
         }
 
+        public static ValidationResult<T> EnsureDataAnnotations<T>(this ValidationResult<T> result, IServiceProvider serviceProvider = null, IDictionary<object, object> items = null) =>
+            EnsureDataAnnotations(result, result.IsSuccess ? result.Value : default(T), serviceProvider, items);
+
         public static ValidationResult<T> EnsureDataAnnotations<T>(this ValidationResult<T> result, object obj, IServiceProvider serviceProvider = null, IDictionary<object, object> items = null)
         {
             if (result.IsSuccess)
@@ -46,6 +49,12 @@ namespace FreakingAwesome.ValidationResult
 
         public async static Task<ValidationResult> EnsureDataAnnotationsAsync(this Task<ValidationResult> result, object obj, IServiceProvider serviceProvider = null, IDictionary<object, object> items = null) =>
             EnsureDataAnnotations(await result, obj, serviceProvider, items);
+
+        public async static Task<ValidationResult<T>> EnsureDataAnnotations<T>(this Task<ValidationResult<T>> result, IServiceProvider serviceProvider = null, IDictionary<object, object> items = null)
+        {
+            var r = await result;
+            return EnsureDataAnnotations(r, r.IsSuccess ? r.Value : default(T), serviceProvider, items);
+        }
 
         public async static Task<ValidationResult<T>> EnsureDataAnnotations<T>(this Task<ValidationResult<T>> result, object obj, IServiceProvider serviceProvider = null, IDictionary<object, object> items = null) =>
             EnsureDataAnnotations(await result, obj, serviceProvider, items);
