@@ -10,7 +10,7 @@ message, reminiscent of ASP.Net MVC ModelState error reporting paradigm.
 ## Motivation
 
 The `Result` structs and extensions are a great foundation, but the single string `Error` inside `Result` and
-`Result<Ok>` where too limiting, while `Result<Ok, Err>` extensions were incomplete.
+`Result<Ok>` were too limiting, while `Result<Ok, Err>` extensions were incomplete.
 
 Adding all the extra functionality to `Result<Ok, Err>` just proved too cumbersome and was just to unwieldy in the end,
 so I instead chose to swap out the internals of `Result` `Result<Ok>` with an `Error` value I have found useful in the
@@ -29,7 +29,7 @@ in a few different ways.
  - [ ] Documentation and examples
  - [ ] Publish on nuget.org
 
-## [Functional Extensions for C#](https://github.com/vkhorikov/CSharpFunctionalExtensions) Contributors
+## Contributors to the Original [Functional Extensions for C#](https://github.com/vkhorikov/CSharpFunctionalExtensions)
 
 A big thanks to the project contributors!
 
