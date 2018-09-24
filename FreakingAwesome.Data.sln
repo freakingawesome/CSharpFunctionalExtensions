@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27004.2002
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FreakingAwesome.ValidationResult", "FreakingAwesome.ValidationResult\FreakingAwesome.ValidationResult.csproj", "{9598EC2B-2119-4FC4-9AC0-9AD5E41CA6A0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FreakingAwesome.Data", "FreakingAwesome.Data\FreakingAwesome.Data.csproj", "{9598EC2B-2119-4FC4-9AC0-9AD5E41CA6A0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{FBDA8B35-373E-4D4A-BB91-40568665D6A5}"
 EndProject
@@ -17,9 +17,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinkTest.Standard.1.3", "Li
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinkTest.Standard.2.0", "LinkTest.Standard.2.0\LinkTest.Standard.2.0.csproj", "{CACEF620-87C0-4179-AC00-AC134224B27E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FreakingAwesome.ValidationResult.Examples", "FreakingAwesome.ValidationResult.Examples\FreakingAwesome.ValidationResult.Examples.csproj", "{C05C3261-447D-40F6-B516-791A01BA5052}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FreakingAwesome.Data.Examples", "FreakingAwesome.Data.Examples\FreakingAwesome.Data.Examples.csproj", "{C05C3261-447D-40F6-B516-791A01BA5052}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FreakingAwesome.ValidationResult.Tests", "FreakingAwesome.ValidationResult.Tests\FreakingAwesome.ValidationResult.Tests.csproj", "{AAC59D01-6546-4366-B990-4A765EF4D796}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FreakingAwesome.Data.Tests", "FreakingAwesome.Data.Tests\FreakingAwesome.Data.Tests.csproj", "{AAC59D01-6546-4366-B990-4A765EF4D796}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,4 +1,4 @@
-namespace FreakingAwesome.ValidationResult.Examples.ResultExtensions
+namespace FreakingAwesome.Data.Examples.ResultExtensions
 {
     public class ExampleFromPluralsightCourse
     {
@@ -13,9 +13,9 @@ namespace FreakingAwesome.ValidationResult.Examples.ResultExtensions
                 .OnBoth(result => result.IsSuccess ? "Ok" : result.Error.FormatString());
         }
 
-        public ValidationResult<Customer> GetById(long id)
+        public Result<Customer> GetById(long id)
         {
-            return ValidationResult.Ok(new Customer());
+            return Result.Ok(new Customer());
         }
 
         public class Customer
@@ -38,9 +38,9 @@ namespace FreakingAwesome.ValidationResult.Examples.ResultExtensions
 
         public class EmailGateway
         {
-            public ValidationResult SendPromotionNotification(string email)
+            public Result SendPromotionNotification(string email)
             {
-                return ValidationResult.Ok();
+                return Result.Ok();
             }
         }
     }

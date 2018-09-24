@@ -5,134 +5,134 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Transactions;
 
-namespace FreakingAwesome.ValidationResult
+namespace FreakingAwesome.Data
 {
     public static partial class ResultExtensions
     {
         // Non-async extensions
         [DebuggerStepThrough]
-        public static ValidationResult<K> OnSuccessWithTransactionScope<T, K>(this ValidationResult<T> self, Func<T, K> f) =>
+        public static Result<K> OnSuccessWithTransactionScope<T, K>(this Result<T> self, Func<T, K> f) =>
             WithTransactionScope(() => self.OnSuccess(f));
 
         [DebuggerStepThrough]
-        public static ValidationResult<T> OnSuccessWithTransactionScope<T>(this ValidationResult self, Func<T> f) =>
+        public static Result<T> OnSuccessWithTransactionScope<T>(this Result self, Func<T> f) =>
             WithTransactionScope(() => self.OnSuccess(f));
 
         [DebuggerStepThrough]
-        public static ValidationResult<K> OnSuccessWithTransactionScope<T, K>(this ValidationResult<T> self, Func<T, ValidationResult<K>> f) =>
+        public static Result<K> OnSuccessWithTransactionScope<T, K>(this Result<T> self, Func<T, Result<K>> f) =>
             WithTransactionScope(() => self.OnSuccess(f));
 
         [DebuggerStepThrough]
-        public static ValidationResult<T> OnSuccessWithTransactionScope<T>(this ValidationResult self, Func<ValidationResult<T>> f) =>
+        public static Result<T> OnSuccessWithTransactionScope<T>(this Result self, Func<Result<T>> f) =>
             WithTransactionScope(() => self.OnSuccess(f));
 
         [DebuggerStepThrough]
-        public static ValidationResult<K> OnSuccessWithTransactionScope<T, K>(this ValidationResult<T> self, Func<ValidationResult<K>> f) =>
+        public static Result<K> OnSuccessWithTransactionScope<T, K>(this Result<T> self, Func<Result<K>> f) =>
             WithTransactionScope(() => self.OnSuccess(f));
 
         [DebuggerStepThrough]
-        public static ValidationResult OnSuccessWithTransactionScope<T>(this ValidationResult<T> self, Func<T, ValidationResult> f) =>
+        public static Result OnSuccessWithTransactionScope<T>(this Result<T> self, Func<T, Result> f) =>
             WithTransactionScope(() => self.OnSuccess(f));
 
         [DebuggerStepThrough]
-        public static ValidationResult OnSuccessWithTransactionScope(this ValidationResult self, Func<ValidationResult> f) =>
+        public static Result OnSuccessWithTransactionScope(this Result self, Func<Result> f) =>
             WithTransactionScope(() => self.OnSuccess(f));
 
         // Async - Both Operands
         [DebuggerStepThrough]
-        public static Task<ValidationResult<K>> OnSuccessWithTransactionScopeAsync<T, K>(this Task<ValidationResult<T>> self, Func<T, Task<K>> f, bool continueOnCapturedContext = true) =>
+        public static Task<Result<K>> OnSuccessWithTransactionScopeAsync<T, K>(this Task<Result<T>> self, Func<T, Task<K>> f, bool continueOnCapturedContext = true) =>
             WithTransactionScopeAsync(() => self.OnSuccessAsync(f, continueOnCapturedContext));
 
         [DebuggerStepThrough]
-        public static Task<ValidationResult<T>> OnSuccessWithTransactionScopeAsync<T>(this Task<ValidationResult> self, Func<Task<T>> f, bool continueOnCapturedContext = true) =>
+        public static Task<Result<T>> OnSuccessWithTransactionScopeAsync<T>(this Task<Result> self, Func<Task<T>> f, bool continueOnCapturedContext = true) =>
             WithTransactionScopeAsync(() => self.OnSuccessAsync(f, continueOnCapturedContext));
 
         [DebuggerStepThrough]
-        public static Task<ValidationResult<K>> OnSuccessWithTransactionScopeAsync<T, K>(this Task<ValidationResult<T>> self, Func<T, Task<ValidationResult<K>>> f, bool continueOnCapturedContext = true) =>
+        public static Task<Result<K>> OnSuccessWithTransactionScopeAsync<T, K>(this Task<Result<T>> self, Func<T, Task<Result<K>>> f, bool continueOnCapturedContext = true) =>
             WithTransactionScopeAsync(() => self.OnSuccessAsync(f, continueOnCapturedContext));
 
         [DebuggerStepThrough]
-        public static Task<ValidationResult<T>> OnSuccessWithTransactionScopeAsync<T>(this Task<ValidationResult> self, Func<Task<ValidationResult<T>>> f, bool continueOnCapturedContext = true) =>
+        public static Task<Result<T>> OnSuccessWithTransactionScopeAsync<T>(this Task<Result> self, Func<Task<Result<T>>> f, bool continueOnCapturedContext = true) =>
             WithTransactionScopeAsync(() => self.OnSuccessAsync(f, continueOnCapturedContext));
 
         [DebuggerStepThrough]
-        public static Task<ValidationResult<K>> OnSuccessWithTransactionScopeAsync<T, K>(this Task<ValidationResult<T>> self, Func<Task<ValidationResult<K>>> f, bool continueOnCapturedContext = true) =>
+        public static Task<Result<K>> OnSuccessWithTransactionScopeAsync<T, K>(this Task<Result<T>> self, Func<Task<Result<K>>> f, bool continueOnCapturedContext = true) =>
             WithTransactionScopeAsync(() => self.OnSuccessAsync(f, continueOnCapturedContext));
 
         [DebuggerStepThrough]
-        public static Task<ValidationResult> OnSuccessWithTransactionScopeAsync<T>(this Task<ValidationResult<T>> self, Func<T, Task<ValidationResult>> f, bool continueOnCapturedContext = true) =>
+        public static Task<Result> OnSuccessWithTransactionScopeAsync<T>(this Task<Result<T>> self, Func<T, Task<Result>> f, bool continueOnCapturedContext = true) =>
             WithTransactionScopeAsync(() => self.OnSuccessAsync(f, continueOnCapturedContext));
 
         [DebuggerStepThrough]
-        public static Task<ValidationResult> OnSuccessWithTransactionScopeAsync(this Task<ValidationResult> self, Func<Task<ValidationResult>> f, bool continueOnCapturedContext = true) =>
+        public static Task<Result> OnSuccessWithTransactionScopeAsync(this Task<Result> self, Func<Task<Result>> f, bool continueOnCapturedContext = true) =>
             WithTransactionScopeAsync(() => self.OnSuccessAsync(f, continueOnCapturedContext));
 
 
         // Async - Left Operands
         [DebuggerStepThrough]
-        public static Task<ValidationResult<K>> OnSuccessWithTransactionScopeAsync<T, K>(this Task<ValidationResult<T>> self, Func<T, K> f, bool continueOnCapturedContext = true) =>
+        public static Task<Result<K>> OnSuccessWithTransactionScopeAsync<T, K>(this Task<Result<T>> self, Func<T, K> f, bool continueOnCapturedContext = true) =>
             WithTransactionScopeAsync(() => self.OnSuccessAsync(f, continueOnCapturedContext));
 
         [DebuggerStepThrough]
-        public static Task<ValidationResult<T>> OnSuccessWithTransactionScopeAsync<T>(this Task<ValidationResult> self, Func<T> f, bool continueOnCapturedContext = true) =>
+        public static Task<Result<T>> OnSuccessWithTransactionScopeAsync<T>(this Task<Result> self, Func<T> f, bool continueOnCapturedContext = true) =>
             WithTransactionScopeAsync(() => self.OnSuccessAsync(f, continueOnCapturedContext));
 
         [DebuggerStepThrough]
-        public static Task<ValidationResult<K>> OnSuccessWithTransactionScopeAsync<T, K>(this Task<ValidationResult<T>> self, Func<T, ValidationResult<K>> f, bool continueOnCapturedContext = true) =>
+        public static Task<Result<K>> OnSuccessWithTransactionScopeAsync<T, K>(this Task<Result<T>> self, Func<T, Result<K>> f, bool continueOnCapturedContext = true) =>
             WithTransactionScopeAsync(() => self.OnSuccessAsync(f, continueOnCapturedContext));
 
         [DebuggerStepThrough]
-        public static Task<ValidationResult<T>> OnSuccessWithTransactionScopeAsync<T>(this Task<ValidationResult> self, Func<ValidationResult<T>> f, bool continueOnCapturedContext = true) =>
+        public static Task<Result<T>> OnSuccessWithTransactionScopeAsync<T>(this Task<Result> self, Func<Result<T>> f, bool continueOnCapturedContext = true) =>
             WithTransactionScopeAsync(() => self.OnSuccessAsync(f, continueOnCapturedContext));
 
         [DebuggerStepThrough]
-        public static Task<ValidationResult<K>> OnSuccessWithTransactionScopeAsync<T, K>(this Task<ValidationResult<T>> self, Func<ValidationResult<K>> f, bool continueOnCapturedContext = true) =>
+        public static Task<Result<K>> OnSuccessWithTransactionScopeAsync<T, K>(this Task<Result<T>> self, Func<Result<K>> f, bool continueOnCapturedContext = true) =>
             WithTransactionScopeAsync(() => self.OnSuccessAsync(f, continueOnCapturedContext));
 
         [DebuggerStepThrough]
-        public static Task<ValidationResult> OnSuccessWithTransactionScopeAsync<T>(this Task<ValidationResult<T>> self, Func<T, ValidationResult> f, bool continueOnCapturedContext = true) =>
+        public static Task<Result> OnSuccessWithTransactionScopeAsync<T>(this Task<Result<T>> self, Func<T, Result> f, bool continueOnCapturedContext = true) =>
             WithTransactionScopeAsync(() => self.OnSuccessAsync(f, continueOnCapturedContext));
 
         [DebuggerStepThrough]
-        public static Task<ValidationResult> OnSuccessWithTransactionScopeAsync(this Task<ValidationResult> self, Func<ValidationResult> f, bool continueOnCapturedContext = true) =>
+        public static Task<Result> OnSuccessWithTransactionScopeAsync(this Task<Result> self, Func<Result> f, bool continueOnCapturedContext = true) =>
             WithTransactionScopeAsync(() => self.OnSuccessAsync(f, continueOnCapturedContext));
 
         [DebuggerStepThrough]
-        public static Task<ValidationResult<K>> MapAsync<T, K>(this Task<ValidationResult<T>> self, Func<T, K> f, bool continueOnCapturedContext = true) =>
+        public static Task<Result<K>> MapAsync<T, K>(this Task<Result<T>> self, Func<T, K> f, bool continueOnCapturedContext = true) =>
             WithTransactionScopeAsync(() => self.OnSuccessAsync(f, continueOnCapturedContext));
 
         [DebuggerStepThrough]
-        public static Task<ValidationResult<T>> MapAsync<T>(this Task<ValidationResult> self, Func<T> f, bool continueOnCapturedContext = true) =>
+        public static Task<Result<T>> MapAsync<T>(this Task<Result> self, Func<T> f, bool continueOnCapturedContext = true) =>
             WithTransactionScopeAsync(() => self.OnSuccessAsync(f, continueOnCapturedContext));
 
 
         // Async - Right Operands
         [DebuggerStepThrough]
-        public static Task<ValidationResult<K>> OnSuccessWithTransactionScopeAsync<T, K>(this ValidationResult<T> self, Func<T, Task<K>> f, bool continueOnCapturedContext = true) =>
+        public static Task<Result<K>> OnSuccessWithTransactionScopeAsync<T, K>(this Result<T> self, Func<T, Task<K>> f, bool continueOnCapturedContext = true) =>
             WithTransactionScopeAsync(() => self.OnSuccessAsync(f, continueOnCapturedContext));
 
         [DebuggerStepThrough]
-        public static Task<ValidationResult<T>> OnSuccessWithTransactionScopeAsync<T>(this ValidationResult self, Func<Task<T>> f, bool continueOnCapturedContext = true) =>
+        public static Task<Result<T>> OnSuccessWithTransactionScopeAsync<T>(this Result self, Func<Task<T>> f, bool continueOnCapturedContext = true) =>
             WithTransactionScopeAsync(() => self.OnSuccessAsync(f, continueOnCapturedContext));
 
         [DebuggerStepThrough]
-        public static Task<ValidationResult<K>> OnSuccessWithTransactionScopeAsync<T, K>(this ValidationResult<T> self, Func<T, Task<ValidationResult<K>>> f, bool continueOnCapturedContext = true) =>
+        public static Task<Result<K>> OnSuccessWithTransactionScopeAsync<T, K>(this Result<T> self, Func<T, Task<Result<K>>> f, bool continueOnCapturedContext = true) =>
             WithTransactionScopeAsync(() => self.OnSuccessAsync(f, continueOnCapturedContext));
 
         [DebuggerStepThrough]
-        public static Task<ValidationResult<T>> OnSuccessWithTransactionScopeAsync<T>(this ValidationResult self, Func<Task<ValidationResult<T>>> f, bool continueOnCapturedContext = true) =>
+        public static Task<Result<T>> OnSuccessWithTransactionScopeAsync<T>(this Result self, Func<Task<Result<T>>> f, bool continueOnCapturedContext = true) =>
             WithTransactionScopeAsync(() => self.OnSuccessAsync(f, continueOnCapturedContext));
 
         [DebuggerStepThrough]
-        public static Task<ValidationResult<K>> OnSuccessWithTransactionScopeAsync<T, K>(this ValidationResult<T> self, Func<Task<ValidationResult<K>>> f, bool continueOnCapturedContext = true) =>
+        public static Task<Result<K>> OnSuccessWithTransactionScopeAsync<T, K>(this Result<T> self, Func<Task<Result<K>>> f, bool continueOnCapturedContext = true) =>
             WithTransactionScopeAsync(() => self.OnSuccessAsync(f, continueOnCapturedContext));
 
         [DebuggerStepThrough]
-        public static Task<ValidationResult> OnSuccessWithTransactionScopeAsync<T>(this ValidationResult<T> self, Func<T, Task<ValidationResult>> f, bool continueOnCapturedContext = true) =>
+        public static Task<Result> OnSuccessWithTransactionScopeAsync<T>(this Result<T> self, Func<T, Task<Result>> f, bool continueOnCapturedContext = true) =>
             WithTransactionScopeAsync(() => self.OnSuccessAsync(f, continueOnCapturedContext));
 
         [DebuggerStepThrough]
-        public static Task<ValidationResult> OnSuccessWithTransactionScopeAsync(this ValidationResult self, Func<Task<ValidationResult>> f, bool continueOnCapturedContext = true) =>
+        public static Task<Result> OnSuccessWithTransactionScopeAsync(this Result self, Func<Task<Result>> f, bool continueOnCapturedContext = true) =>
             WithTransactionScopeAsync(() => self.OnSuccessAsync(f, continueOnCapturedContext));
 
 

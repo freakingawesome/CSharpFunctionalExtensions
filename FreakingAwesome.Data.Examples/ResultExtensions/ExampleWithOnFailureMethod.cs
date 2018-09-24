@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace FreakingAwesome.ValidationResult.Examples.ResultExtensions
+namespace FreakingAwesome.Data.Examples.ResultExtensions
 {
     public class ExampleWithOnFailureMethod
     {
@@ -18,9 +18,9 @@ namespace FreakingAwesome.ValidationResult.Examples.ResultExtensions
                 .OnBoth(result => result.IsSuccess ? "OK" : result.Error.FormatString());
         }
 
-        private ValidationResult<Customer> GetById(long id)
+        private Result<Customer> GetById(long id)
         {
-            return ValidationResult.Ok(new Customer());
+            return Result.Ok(new Customer());
         }
 
         private class Customer
@@ -33,9 +33,9 @@ namespace FreakingAwesome.ValidationResult.Examples.ResultExtensions
 
         private class PaymentGateway
         {
-            public ValidationResult ChargePayment(Customer customer, decimal moneyAmount)
+            public Result ChargePayment(Customer customer, decimal moneyAmount)
             {
-                return ValidationResult.Ok();
+                return Result.Ok();
             }
 
             public void RollbackLastTransaction()
@@ -51,9 +51,9 @@ namespace FreakingAwesome.ValidationResult.Examples.ResultExtensions
 
         private class Database
         {
-            public ValidationResult Save(Customer customer)
+            public Result Save(Customer customer)
             {
-                return ValidationResult.Ok();
+                return Result.Ok();
             }
         }
     }

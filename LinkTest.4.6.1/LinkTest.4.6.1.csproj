@@ -38,9 +38,9 @@
     <Compile Include="Test.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\FreakingAwesome.ValidationResult\FreakingAwesome.ValidationResult.csproj">
+    <ProjectReference Include="..\FreakingAwesome.Data\FreakingAwesome.Data.csproj">
       <Project>{9598ec2b-2119-4fc4-9ac0-9ad5e41ca6a0}</Project>
-      <Name>FreakingAwesome.ValidationResult</Name>
+      <Name>FreakingAwesome.Data</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

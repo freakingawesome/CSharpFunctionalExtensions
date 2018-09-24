@@ -2,7 +2,7 @@ using System.Linq;
 using FluentAssertions;
 using Xunit;
 
-namespace FreakingAwesome.ValidationResult.Tests.ResultTests
+namespace FreakingAwesome.Data.Tests.ResultTests
 {
     public class ExtensionTests
     {
@@ -13,7 +13,7 @@ namespace FreakingAwesome.ValidationResult.Tests.ResultTests
         {
             bool myBool = false;
 
-            ValidationResult myResult = ValidationResult.Fail(_errorMessage);
+            Result myResult = Result.Fail(_errorMessage);
             myResult.OnFailure(() => myBool = true);
 
             myBool.Should().Be(true);
@@ -24,7 +24,7 @@ namespace FreakingAwesome.ValidationResult.Tests.ResultTests
         {
             bool myBool = false;
 
-            ValidationResult<MyClass> myResult = ValidationResult.Fail<MyClass>(_errorMessage);
+            Result<MyClass> myResult = Result.Fail<MyClass>(_errorMessage);
             myResult.OnFailure(() => myBool = true);
 
             myBool.Should().Be(true);
@@ -35,7 +35,7 @@ namespace FreakingAwesome.ValidationResult.Tests.ResultTests
         {
             string myError = string.Empty;
 
-            ValidationResult<MyClass> myResult = ValidationResult.Fail<MyClass>(_errorMessage);
+            Result<MyClass> myResult = Result.Fail<MyClass>(_errorMessage);
             myResult.OnFailure(error => myError = error.First().Error);
 
             myError.Should().Be(_errorMessage);

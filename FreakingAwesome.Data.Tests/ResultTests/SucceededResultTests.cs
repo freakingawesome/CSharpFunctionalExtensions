@@ -3,14 +3,14 @@ using FluentAssertions;
 using Xunit;
 
 
-namespace FreakingAwesome.ValidationResult.Tests.ResultTests
+namespace FreakingAwesome.Data.Tests.ResultTests
 {
     public class SucceededResultTests
     {
         [Fact]
         public void Can_create_a_non_generic_version()
         {
-            ValidationResult result = ValidationResult.Ok();
+            Result result = Result.Ok();
 
             result.IsFailure.Should().Be(false);
             result.IsSuccess.Should().Be(true);
@@ -21,7 +21,7 @@ namespace FreakingAwesome.ValidationResult.Tests.ResultTests
         {
             var myClass = new MyClass();
 
-            ValidationResult<MyClass> result = ValidationResult.Ok(myClass);
+            Result<MyClass> result = Result.Ok(myClass);
 
             result.IsFailure.Should().Be(false);
             result.IsSuccess.Should().Be(true);
@@ -31,7 +31,7 @@ namespace FreakingAwesome.ValidationResult.Tests.ResultTests
         [Fact]
         public void Cannot_create_without_Value()
         {
-            Action action = () => { ValidationResult.Ok((MyClass)null); };
+            Action action = () => { Result.Ok((MyClass)null); };
 
             action.ShouldThrow<ArgumentNullException>();;
         }
@@ -39,7 +39,7 @@ namespace FreakingAwesome.ValidationResult.Tests.ResultTests
         [Fact]
         public void Cannot_access_Error_non_generic_version()
         {
-            ValidationResult result = ValidationResult.Ok();
+            Result result = Result.Ok();
 
             Action action = () =>
             {
@@ -52,7 +52,7 @@ namespace FreakingAwesome.ValidationResult.Tests.ResultTests
         [Fact]
         public void Cannot_access_Error_generic_version()
         {
-            ValidationResult<MyClass> result = ValidationResult.Ok(new MyClass());
+            Result<MyClass> result = Result.Ok(new MyClass());
 
             Action action = () =>
             {

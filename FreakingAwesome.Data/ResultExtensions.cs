@@ -4,59 +4,59 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace FreakingAwesome.ValidationResult
+namespace FreakingAwesome.Data
 {
     public static partial class ResultExtensions
     {
-        public static ValidationResult<K> OnSuccess<T, K>(this ValidationResult<T> result, Func<T, K> func)
+        public static Result<K> OnSuccess<T, K>(this Result<T> result, Func<T, K> func)
         {
             if (result.IsFailure)
-                return ValidationResult.Fail<K>(result.Error);
+                return Result.Fail<K>(result.Error);
 
-            return ValidationResult.Ok(func(result.Value));
+            return Result.Ok(func(result.Value));
         }
 
-        public static ValidationResult<T> OnSuccess<T>(this ValidationResult result, Func<T> func)
+        public static Result<T> OnSuccess<T>(this Result result, Func<T> func)
         {
             if (result.IsFailure)
-                return ValidationResult.Fail<T>(result.Error);
+                return Result.Fail<T>(result.Error);
 
-            return ValidationResult.Ok(func());
+            return Result.Ok(func());
         }
 
-        public static ValidationResult<K> OnSuccess<T, K>(this ValidationResult<T> result, Func<T, ValidationResult<K>> func)
+        public static Result<K> OnSuccess<T, K>(this Result<T> result, Func<T, Result<K>> func)
         {
             if (result.IsFailure)
-                return ValidationResult.Fail<K>(result.Error);
+                return Result.Fail<K>(result.Error);
 
             return func(result.Value);
         }
 
-        public static ValidationResult<T> OnSuccess<T>(this ValidationResult result, Func<ValidationResult<T>> func)
+        public static Result<T> OnSuccess<T>(this Result result, Func<Result<T>> func)
         {
             if (result.IsFailure)
-                return ValidationResult.Fail<T>(result.Error);
+                return Result.Fail<T>(result.Error);
 
             return func();
         }
 
-        public static ValidationResult<K> OnSuccess<T, K>(this ValidationResult<T> result, Func<ValidationResult<K>> func)
+        public static Result<K> OnSuccess<T, K>(this Result<T> result, Func<Result<K>> func)
         {
             if (result.IsFailure)
-                return ValidationResult.Fail<K>(result.Error);
+                return Result.Fail<K>(result.Error);
 
             return func();
         }
 
-        public static ValidationResult OnSuccess<T>(this ValidationResult<T> result, Func<T, ValidationResult> func)
+        public static Result OnSuccess<T>(this Result<T> result, Func<T, Result> func)
         {
             if (result.IsFailure)
-                return ValidationResult.Fail(result.Error);
+                return Result.Fail(result.Error);
 
             return func(result.Value);
         }
 
-        public static ValidationResult OnSuccess(this ValidationResult result, Func<ValidationResult> func)
+        public static Result OnSuccess(this Result result, Func<Result> func)
         {
             if (result.IsFailure)
                 return result;
@@ -64,51 +64,51 @@ namespace FreakingAwesome.ValidationResult
             return func();
         }
 
-        public static ValidationResult<T> Ensure<T>(this ValidationResult<T> result, Func<T, bool> predicate, string errorMessage) =>
+        public static Result<T> Ensure<T>(this Result<T> result, Func<T, bool> predicate, string errorMessage) =>
             Ensure(result, predicate, "", errorMessage);
 
-        public static ValidationResult<T> Ensure<T>(this ValidationResult<T> result, Func<T, bool> predicate, string field, string error)
+        public static Result<T> Ensure<T>(this Result<T> result, Func<T, bool> predicate, string field, string error)
         {
             if (result.IsFailure)
-                return ValidationResult.Fail<T>(result.Error);
+                return Result.Fail<T>(result.Error);
 
             if (!predicate(result.Value))
-                return ValidationResult.Fail<T>(field, error);
+                return Result.Fail<T>(field, error);
 
-            return ValidationResult.Ok(result.Value);
+            return Result.Ok(result.Value);
         }
 
-        public static ValidationResult Ensure(this ValidationResult result, Func<bool> predicate, string errorMessage) =>
+        public static Result Ensure(this Result result, Func<bool> predicate, string errorMessage) =>
             Ensure(result, predicate, "", errorMessage);
 
-        public static ValidationResult Ensure(this ValidationResult result, Func<bool> predicate, string field, string error)
+        public static Result Ensure(this Result result, Func<bool> predicate, string field, string error)
         {
             if (result.IsFailure)
-                return ValidationResult.Fail(result.Error);
+                return Result.Fail(result.Error);
 
             if (!predicate())
-                return ValidationResult.Fail(field, error);
+                return Result.Fail(field, error);
 
-            return ValidationResult.Ok();
+            return Result.Ok();
         }
 
-        public static ValidationResult<K> Map<T, K>(this ValidationResult<T> result, Func<T, K> func)
+        public static Result<K> Map<T, K>(this Result<T> result, Func<T, K> func)
         {
             if (result.IsFailure)
-                return ValidationResult.Fail<K>(result.Error);
+                return Result.Fail<K>(result.Error);
 
-            return ValidationResult.Ok(func(result.Value));
+            return Result.Ok(func(result.Value));
         }
 
-        public static ValidationResult<T> Map<T>(this ValidationResult result, Func<T> func)
+        public static Result<T> Map<T>(this Result result, Func<T> func)
         {
             if (result.IsFailure)
-                return ValidationResult.Fail<T>(result.Error);
+                return Result.Fail<T>(result.Error);
 
-            return ValidationResult.Ok(func());
+            return Result.Ok(func());
         }
 
-        public static ValidationResult<T> OnSuccess<T>(this ValidationResult<T> result, Action<T> action)
+        public static Result<T> OnSuccess<T>(this Result<T> result, Action<T> action)
         {
             if (result.IsSuccess)
             {
@@ -118,7 +118,7 @@ namespace FreakingAwesome.ValidationResult
             return result;
         }
 
-        public static ValidationResult OnSuccess(this ValidationResult result, Action action)
+        public static Result OnSuccess(this Result result, Action action)
         {
             if (result.IsSuccess)
             {
@@ -128,11 +128,11 @@ namespace FreakingAwesome.ValidationResult
             return result;
         }
 
-        public static T OnBoth<T>(this ValidationResult result, Func<ValidationResult, T> func) => func(result);
+        public static T OnBoth<T>(this Result result, Func<Result, T> func) => func(result);
 
-        public static K OnBoth<T, K>(this ValidationResult<T> result, Func<ValidationResult<T>, K> func) => func(result);
+        public static K OnBoth<T, K>(this Result<T> result, Func<Result<T>, K> func) => func(result);
 
-        public static ValidationResult<T> OnFailure<T>(this ValidationResult<T> result, Action action)
+        public static Result<T> OnFailure<T>(this Result<T> result, Action action)
         {
             if (result.IsFailure)
             {
@@ -142,7 +142,7 @@ namespace FreakingAwesome.ValidationResult
             return result;
         }
 
-        public static ValidationResult OnFailure(this ValidationResult result, Action action)
+        public static Result OnFailure(this Result result, Action action)
         {
             if (result.IsFailure)
             {
@@ -152,7 +152,7 @@ namespace FreakingAwesome.ValidationResult
             return result;
         }
 
-        public static ValidationResult<T> OnFailure<T>(this ValidationResult<T> result, Action<IEnumerable<ValidationError>> action)
+        public static Result<T> OnFailure<T>(this Result<T> result, Action<IEnumerable<ValidationError>> action)
         {
             if (result.IsFailure)
             {
@@ -162,7 +162,7 @@ namespace FreakingAwesome.ValidationResult
             return result;
         }
 
-        public static ValidationResult OnFailure(this ValidationResult result, Action<IEnumerable<ValidationError>> action)
+        public static Result OnFailure(this Result result, Action<IEnumerable<ValidationError>> action)
         {
             if (result.IsFailure)
             {
@@ -178,8 +178,8 @@ namespace FreakingAwesome.ValidationResult
         /// </summary>
         /// <param name="results">List of results.</param>
         [DebuggerStepThrough]
-        public static ValidationResult Combine(this ValidationResult self, params ValidationResult[] results) =>
-            ValidationResult.Combine(new ValidationResult[] { self }.Concat(results).ToArray());
+        public static Result Combine(this Result self, params Result[] results) =>
+            Result.Combine(new Result[] { self }.Concat(results).ToArray());
 
 #if !NET40
         /// <summary>
@@ -188,8 +188,8 @@ namespace FreakingAwesome.ValidationResult
         /// </summary>
         /// <param name="results">List of results.</param>
         [DebuggerStepThrough]
-        public static async Task<ValidationResult> CombineAsync(this ValidationResult self, params Task<ValidationResult>[] results) =>
-            await ValidationResult.CombineAsync(new Task<ValidationResult>[] { Task.FromResult(self) }.Concat(results).ToArray());
+        public static async Task<Result> CombineAsync(this Result self, params Task<Result>[] results) =>
+            await Result.CombineAsync(new Task<Result>[] { Task.FromResult(self) }.Concat(results).ToArray());
 #endif
 
         /// <summary>
@@ -199,8 +199,8 @@ namespace FreakingAwesome.ValidationResult
         /// </summary>
         /// <param name="results">List of results.</param>
         [DebuggerStepThrough]
-        public static ValidationResult<T> Combine<T>(this ValidationResult<T> self, params ValidationResult[] results) =>
-            self.IsFailure ? self : ValidationResult.Combine(results).Map(self.Value);
+        public static Result<T> Combine<T>(this Result<T> self, params Result[] results) =>
+            self.IsFailure ? self : Result.Combine(results).Map(self.Value);
 
         /// <summary>
         /// Returns failure which combined from all failures in the <paramref name="results"/> list.
@@ -209,8 +209,8 @@ namespace FreakingAwesome.ValidationResult
         /// </summary>
         /// <param name="results">List of results.</param>
         [DebuggerStepThrough]
-        public static ValidationResult Combine<T>(this ValidationResult<T> self, params ValidationResult<T>[] results) =>
-            ValidationResult.Combine(new ValidationResult<T>[] { self }.Concat(results).ToArray());
+        public static Result Combine<T>(this Result<T> self, params Result<T>[] results) =>
+            Result.Combine(new Result<T>[] { self }.Concat(results).ToArray());
 
 #if !NET40
         /// <summary>
@@ -220,8 +220,8 @@ namespace FreakingAwesome.ValidationResult
         /// </summary>
         /// <param name="results">List of results.</param>
         [DebuggerStepThrough]
-        public static async Task<ValidationResult> CombineAsync<T>(this ValidationResult<T> self, params Task<ValidationResult<T>>[] results) =>
-            await ValidationResult.CombineAsync(new Task<ValidationResult<T>>[] { Task.FromResult(self) }.Concat(results).ToArray());
+        public static async Task<Result> CombineAsync<T>(this Result<T> self, params Task<Result<T>>[] results) =>
+            await Result.CombineAsync(new Task<Result<T>>[] { Task.FromResult(self) }.Concat(results).ToArray());
 
         /// <summary>
         /// Returns failure which combined from all failures in the <paramref name="results"/> list.
@@ -230,8 +230,8 @@ namespace FreakingAwesome.ValidationResult
         /// </summary>
         /// <param name="results">List of results.</param>
         [DebuggerStepThrough]
-        public static async Task<ValidationResult<T>> CombineAsync<T>(this ValidationResult<T> self, params Task<ValidationResult>[] results) =>
-            self.IsFailure ? self : Combine(self, await ValidationResult.CombineAsync(results));
+        public static async Task<Result<T>> CombineAsync<T>(this Result<T> self, params Task<Result>[] results) =>
+            self.IsFailure ? self : Combine(self, await Result.CombineAsync(results));
 #endif
 
         /// <summary>
@@ -240,8 +240,8 @@ namespace FreakingAwesome.ValidationResult
         /// </summary>
         /// <param name="results">List of results.</param>
         [DebuggerStepThrough]
-        public static ValidationResult<IList<T>> CombineRetainValues<T>(this ValidationResult<T> self, params ValidationResult<T>[] results) =>
-            ValidationResult.CombineRetainValues(new ValidationResult<T>[] { self }.Concat(results).ToArray());
+        public static Result<IList<T>> CombineRetainValues<T>(this Result<T> self, params Result<T>[] results) =>
+            Result.CombineRetainValues(new Result<T>[] { self }.Concat(results).ToArray());
 
 #if !NET40
         /// <summary>
@@ -250,50 +250,50 @@ namespace FreakingAwesome.ValidationResult
         /// </summary>
         /// <param name="results">List of results.</param>
         [DebuggerStepThrough]
-        public static async Task<ValidationResult<IList<T>>> CombineRetainValuesAsync<T>(this ValidationResult<T> self, params Task<ValidationResult<T>>[] results) =>
-            await ValidationResult.CombineRetainValuesAsync(new Task<ValidationResult<T>>[] { Task.FromResult(self) }.Concat(results).ToArray());
+        public static async Task<Result<IList<T>>> CombineRetainValuesAsync<T>(this Result<T> self, params Task<Result<T>>[] results) =>
+            await Result.CombineRetainValuesAsync(new Task<Result<T>>[] { Task.FromResult(self) }.Concat(results).ToArray());
 #endif
 
         /// <summary>
         /// Joins the inner result
         /// </summary>
         [DebuggerStepThrough]
-        public static ValidationResult Join(this ValidationResult<ValidationResult> self) =>
+        public static Result Join(this Result<Result> self) =>
             self.IsFailure ? self : self.Value;
 
         /// <summary>
         /// Joins the inner result
         /// </summary>
         [DebuggerStepThrough]
-        public static ValidationResult<T> Join<T>(this ValidationResult<ValidationResult<T>> self) =>
-            self.IsFailure ? ValidationResult.Fail<T>(self.Error) : self.Value;
+        public static Result<T> Join<T>(this Result<Result<T>> self) =>
+            self.IsFailure ? Result.Fail<T>(self.Error) : self.Value;
 
         /// <summary>
         /// Joins the inner result
         /// </summary>
         [DebuggerStepThrough]
-        public async static Task<ValidationResult> JoinAsync(this ValidationResult<Task<ValidationResult>> self) =>
+        public async static Task<Result> JoinAsync(this Result<Task<Result>> self) =>
             self.IsFailure ? self : await self.Value;
 
         /// <summary>
         /// Joins the inner result
         /// </summary>
         [DebuggerStepThrough]
-        public async static Task<ValidationResult<T>> JoinAsync<T>(this ValidationResult<Task<ValidationResult<T>>> self) =>
-            self.IsFailure ? ValidationResult.Fail<T>(self.Error) : await self.Value;
+        public async static Task<Result<T>> JoinAsync<T>(this Result<Task<Result<T>>> self) =>
+            self.IsFailure ? Result.Fail<T>(self.Error) : await self.Value;
 
         /// <summary>
         /// Joins the inner result
         /// </summary>
         [DebuggerStepThrough]
-        public async static Task<ValidationResult> JoinAsync(this Task<ValidationResult<Task<ValidationResult>>> self) =>
+        public async static Task<Result> JoinAsync(this Task<Result<Task<Result>>> self) =>
             await JoinAsync(await self);
 
         /// <summary>
         /// Joins the inner result
         /// </summary>
         [DebuggerStepThrough]
-        public async static Task<ValidationResult<T>> JoinAsync<T>(this Task<ValidationResult<Task<ValidationResult<T>>>> self) =>
+        public async static Task<Result<T>> JoinAsync<T>(this Task<Result<Task<Result<T>>>> self) =>
             await JoinAsync(await self);
     }
 }

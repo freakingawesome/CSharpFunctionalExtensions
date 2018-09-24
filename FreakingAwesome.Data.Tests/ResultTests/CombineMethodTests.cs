@@ -3,18 +3,18 @@ using FluentAssertions;
 using Xunit;
 
 
-namespace FreakingAwesome.ValidationResult.Tests.ResultTests
+namespace FreakingAwesome.Data.Tests.ResultTests
 {
     public class CombineMethodTests
     {
         [Fact]
         public void FirstFailureOrSuccess_returns_the_first_failed_result()
         {
-            ValidationResult result1 = ValidationResult.Ok();
-            ValidationResult result2 = ValidationResult.Fail("Failure 1");
-            ValidationResult result3 = ValidationResult.Fail("Failure 2");
+            Result result1 = Result.Ok();
+            Result result2 = Result.Fail("Failure 1");
+            Result result3 = Result.Fail("Failure 2");
 
-            ValidationResult result = ValidationResult.FirstFailureOrSuccess(result1, result2, result3);
+            Result result = Result.FirstFailureOrSuccess(result1, result2, result3);
 
             result.IsFailure.Should().BeTrue();
             result.Error.First().Error.Should().Be("Failure 1");
@@ -23,11 +23,11 @@ namespace FreakingAwesome.ValidationResult.Tests.ResultTests
         [Fact]
         public void FirstFailureOrSuccess_returns_Ok_if_no_failures()
         {
-            ValidationResult result1 = ValidationResult.Ok();
-            ValidationResult result2 = ValidationResult.Ok();
-            ValidationResult result3 = ValidationResult.Ok();
+            Result result1 = Result.Ok();
+            Result result2 = Result.Ok();
+            Result result3 = Result.Ok();
 
-            ValidationResult result = ValidationResult.FirstFailureOrSuccess(result1, result2, result3);
+            Result result = Result.FirstFailureOrSuccess(result1, result2, result3);
 
             result.IsSuccess.Should().BeTrue();
         }
@@ -35,11 +35,11 @@ namespace FreakingAwesome.ValidationResult.Tests.ResultTests
         [Fact]
         public void Combine_combines_all_errors_together()
         {
-            ValidationResult result1 = ValidationResult.Ok();
-            ValidationResult result2 = ValidationResult.Fail("Failure 1");
-            ValidationResult result3 = ValidationResult.Fail("Failure 2", "Failure 3");
+            Result result1 = Result.Ok();
+            Result result2 = Result.Fail("Failure 1");
+            Result result3 = Result.Fail("Failure 2", "Failure 3");
 
-            ValidationResult result = ValidationResult.Combine(result1, result2, result3);
+            Result result = Result.Combine(result1, result2, result3);
 
             result.IsSuccess.Should().BeFalse();
             var verrs = result.Error.ToList();
@@ -52,11 +52,11 @@ namespace FreakingAwesome.ValidationResult.Tests.ResultTests
         [Fact]
         public void Combine_returns_Ok_if_no_failures()
         {
-            ValidationResult result1 = ValidationResult.Ok();
-            ValidationResult result2 = ValidationResult.Ok();
-            ValidationResult<string> result3 = ValidationResult.Ok("Some string");
+            Result result1 = Result.Ok();
+            Result result2 = Result.Ok();
+            Result<string> result3 = Result.Ok("Some string");
 
-            ValidationResult result = ValidationResult.Combine(result1, result2, result3);
+            Result result = Result.Combine(result1, result2, result3);
 
             result.IsSuccess.Should().BeTrue();
         }
@@ -64,9 +64,9 @@ namespace FreakingAwesome.ValidationResult.Tests.ResultTests
         [Fact]
         public void Combine_works_with_array_of_Generic_results_success()
         {
-            ValidationResult<string>[] results = new ValidationResult<string>[] { ValidationResult.Ok(""), ValidationResult.Ok("") };
+            Result<string>[] results = new Result<string>[] { Result.Ok(""), Result.Ok("") };
 
-            ValidationResult result = ValidationResult.Combine(results);
+            Result result = Result.Combine(results);
 
             result.IsSuccess.Should().BeTrue();
         }

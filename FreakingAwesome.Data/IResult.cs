@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace FreakingAwesome.ValidationResult
+namespace FreakingAwesome.Data
 {
     public interface IResult
     {

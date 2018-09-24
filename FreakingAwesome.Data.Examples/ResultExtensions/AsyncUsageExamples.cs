@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace FreakingAwesome.ValidationResult.Examples.ResultExtensions
+namespace FreakingAwesome.Data.Examples.ResultExtensions
 {
     public class AsyncUsageExamples
     {
@@ -26,14 +26,14 @@ namespace FreakingAwesome.ValidationResult.Examples.ResultExtensions
                 .OnBothAsync(result => result.IsSuccess ? "Ok" : result.Error.FormatString());
         }
 
-        public Task<ValidationResult<Customer>> GetByIdAsync(long id)
+        public Task<Result<Customer>> GetByIdAsync(long id)
         {
-            return Task.FromResult(ValidationResult.Ok(new Customer()));
+            return Task.FromResult(Result.Ok(new Customer()));
         }
 
-        public ValidationResult<Customer> GetById(long id)
+        public Result<Customer> GetById(long id)
         {
-            return ValidationResult.Ok(new Customer());
+            return Result.Ok(new Customer());
         }
 
         public class Customer
@@ -61,14 +61,14 @@ namespace FreakingAwesome.ValidationResult.Examples.ResultExtensions
 
         public class EmailGateway
         {
-            public ValidationResult SendPromotionNotification(string email)
+            public Result SendPromotionNotification(string email)
             {
-                return ValidationResult.Ok();
+                return Result.Ok();
             }
 
-            public Task<ValidationResult> SendPromotionNotificationAsync(string email)
+            public Task<Result> SendPromotionNotificationAsync(string email)
             {
-                return Task.FromResult(ValidationResult.Ok());
+                return Task.FromResult(Result.Ok());
             }
         }
     }

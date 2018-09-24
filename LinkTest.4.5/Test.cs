@@ -1,4 +1,4 @@
-using FreakingAwesome.ValidationResult;
+using FreakingAwesome.Data;
 
 namespace LinkTest
 {
@@ -6,7 +6,7 @@ namespace LinkTest
     {
         static void ForceLink() // If the library isn't referenced, it doesn't actually get linked
         {
-            ValidationResult<Test> result = ValidationResult.Ok(new Test());
+            Result<Test> result = Result.Ok(new Test());
 
             System.Diagnostics.Debug.WriteLine(string.Format("result IsSuccess: {0} IsFailure: {1}", result.IsSuccess, result.IsFailure));
         }

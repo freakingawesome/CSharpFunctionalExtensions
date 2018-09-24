@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace FreakingAwesome.ValidationResult
+namespace FreakingAwesome.Data
 {
     [Serializable]
     public struct ValidationError

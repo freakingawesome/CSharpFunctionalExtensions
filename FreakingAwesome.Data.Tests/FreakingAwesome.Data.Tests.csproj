@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\FreakingAwesome.ValidationResult\FreakingAwesome.ValidationResult.csproj" />
+    <ProjectReference Include="..\FreakingAwesome.Data\FreakingAwesome.Data.csproj" />
   </ItemGroup>
 
   <ItemGroup>
