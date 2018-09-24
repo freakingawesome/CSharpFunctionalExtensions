@@ -4,8 +4,9 @@
 
 This is a forked and slimmed down version of the `Result` and `Result<Ok>` types from [Functional Extensions for
 C#](https://github.com/vkhorikov/CSharpFunctionalExtensions) which swap in a list of Validation Errors for the single
-string error message found in the original, where each Validation Error consists of an optional field name and error
-message, reminiscent of ASP.Net MVC ModelState error reporting paradigm.
+string error message found in the original, where each Validation Error consists of an optional list of field names and
+error message, similar to the `System.ComponentModel.DataAnnotations` set of functionality. And indeed, you can use Data
+Annotations and validate via the `EnsureDataAnnotations()` extension method.
 
 ## Motivation
 
