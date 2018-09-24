@@ -37,7 +37,7 @@ namespace FreakingAwesome.Data.Tests.ResultTests
         {
             Result result1 = Result.Ok();
             Result result2 = Result.Fail("Failure 1");
-            Result result3 = Result.Fail("Failure 2", "Failure 3");
+            Result result3 = Result.Fail(new[] { new ValidationError("Failure 2"), new ValidationError("Failure 3") });
 
             Result result = Result.Combine(result1, result2, result3);
 

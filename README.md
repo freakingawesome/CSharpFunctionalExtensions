@@ -17,7 +17,7 @@ Adding all the extra functionality to `Result<Ok, Err>` just proved too cumberso
 so I instead chose to swap out the internals of `Result` `Result<Ok>` with an `Error` value I have found useful in the
 past, and which allows an easy way to plug in the `System.ComponentModel.DataAnnotations` style of declarative
 validation annotations.  Initially I had intended to use a different naming convention than the original `Result`, but
-this project grew enough that it is a separate fork, and as such will contain mirrors of the `Maybe` type from the
+this project grew enough that it is a separate fork, and as such contains mirrors of the `Maybe` types from the
 original as well.
 
 ## Immutable ValidationErrors
@@ -27,6 +27,7 @@ in a few different ways, as in using `Combine()` or `Join()`.
 
 ## TODO
 
+ - [ ] Propagate `continueOnCapturedContext` to new async methods (oops)
  - [ ] More tests
  - [ ] Documentation and examples
  - [ ] Publish on nuget.org

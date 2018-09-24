@@ -168,12 +168,6 @@ namespace FreakingAwesome.Data
         }
 
         [DebuggerStepThrough]
-        public static Result Fail(params string[] errors)
-        {
-            return new Result(true, errors.Select(e => new ValidationError(e)));
-        }
-
-        [DebuggerStepThrough]
         public static Result Fail(IEnumerable<ValidationError> error)
         {
             return new Result(true, error);
@@ -195,6 +189,12 @@ namespace FreakingAwesome.Data
         public static Result<T> Fail<T>(string field, string error)
         {
             return new Result<T>(true, default(T), field, error);
+        }
+
+        [DebuggerStepThrough]
+        public static Result<T> Fail<T>(ValidationError error)
+        {
+            return new Result<T>(true, default(T), new[] { error });
         }
 
         [DebuggerStepThrough]

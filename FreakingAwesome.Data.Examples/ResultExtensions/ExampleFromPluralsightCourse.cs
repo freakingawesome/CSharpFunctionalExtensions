@@ -7,15 +7,16 @@ namespace FreakingAwesome.Data.Examples.ResultExtensions
             var gateway = new EmailGateway();
 
             return GetById(id)
+                .ToResult("Customer with such Id is not found: " + id)
                 .Ensure(customer => customer.CanBePromoted(), "The customer has the highest status possible")
                 .OnSuccess(customer => customer.Promote())
                 .OnSuccess(customer => gateway.SendPromotionNotification(customer.Email))
                 .OnBoth(result => result.IsSuccess ? "Ok" : result.Error.FormatString());
         }
 
-        public Result<Customer> GetById(long id)
+        public Maybe<Customer> GetById(long id)
         {
-            return Result.Ok(new Customer());
+            return new Customer();
         }
 
         public class Customer
