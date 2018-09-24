@@ -1,4 +1,4 @@
-# FreakingAwesome.ValidationResult
+# FreakingAwesome.Data
 
 [![GitHub license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/vkhorikov/CSharpFunctionalExtensions/blob/master/LICENSE)
 
@@ -22,8 +22,8 @@ original as well.
 
 ## Immutable ValidationErrors
 
-The `ValidationError` and `ValidationResult` classes are immutable, but the classes can be joined and chained together
-in a few different ways, as in using `Combine()` or `Join()`.
+The `ValidationError` and `Result` classes are immutable, but the classes can be joined and chained together in a few
+different ways, as in using `Combine()` or `Join()`.
 
 ## TODO
 
