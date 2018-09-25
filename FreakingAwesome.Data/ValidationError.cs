@@ -44,7 +44,7 @@ namespace FreakingAwesome.Data
     public static class ValidationErrorExtensions
     {
         public static string FormatString(this IEnumerable<ValidationError> self, string fieldsFormatString = "[{0}] ", string fieldsSeparator = ", ", string separator = "\n") =>
-            string.Join(separator, self.Select(x => x.Fields.Any() ? x.Error : string.Format(fieldsFormatString, string.Join(fieldsSeparator, x.Fields)) + x.Error));
+            string.Join(separator, self.Select(x => x.Fields.Any() ? string.Format(fieldsFormatString, string.Join(fieldsSeparator, x.Fields)) + x.Error : x.Error));
 
         public static IEnumerable<ValidationError> Concat(this IEnumerable<IEnumerable<ValidationError>> self)
         {
