@@ -30,18 +30,18 @@ namespace FreakingAwesome.Data
         public static Maybe<T> Where<T>(this Maybe<T> maybe, Func<T, bool> predicate)
         {
             if (maybe.HasNoValue)
-                return default(T);
+                return Maybe<T>.None;
 
             if (predicate(maybe.Value))
                 return maybe;
 
-            return default(T);
+            return Maybe<T>.None;
         }
 
         public static Maybe<K> Select<T, K>(this Maybe<T> maybe, Func<T, K> selector)
         {
             if (maybe.HasNoValue)
-                return default(K);
+                return Maybe<K>.None;
 
             return selector(maybe.Value);
         }
@@ -49,7 +49,7 @@ namespace FreakingAwesome.Data
         public static Maybe<K> Select<T, K>(this Maybe<T> maybe, Func<T, Maybe<K>> selector)
         {
             if (maybe.HasNoValue)
-                return default(K);
+                return Maybe<K>.None;
 
             return selector(maybe.Value);
         }
