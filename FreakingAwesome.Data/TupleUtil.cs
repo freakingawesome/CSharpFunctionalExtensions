@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿#if NETSTANDARD2_0
+using System.Threading.Tasks;
 
 namespace FreakingAwesome.Data
 {
@@ -119,3 +120,4 @@ namespace FreakingAwesome.Data
         }
     }
 }
+#endif
