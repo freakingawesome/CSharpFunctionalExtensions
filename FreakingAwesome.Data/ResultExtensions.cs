@@ -48,12 +48,17 @@ namespace FreakingAwesome.Data
             return func();
         }
 
-        public static Result OnSuccess<T>(this Result<T> result, Func<T, Result> func)
+        public static Result<T> OnSuccess<T>(this Result<T> result, Func<T, Result> func)
         {
             if (result.IsFailure)
-                return Result.Fail(result.Error);
+                return result;
 
-            return func(result.Value);
+            var next = func(result.Value);
+
+            if (next.IsFailure)
+                return Result.Fail<T>(next.Error);
+
+            return result;
         }
 
         public static Result OnSuccess(this Result result, Func<Result> func)

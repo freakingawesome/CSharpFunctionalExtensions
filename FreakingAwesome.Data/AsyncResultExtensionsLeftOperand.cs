@@ -40,7 +40,7 @@ namespace FreakingAwesome.Data
             return result.OnSuccess(func);
         }
 
-        public static async Task<Result> OnSuccessAsync<T>(this Task<Result<T>> resultTask, Func<T, Result> func, bool continueOnCapturedContext = true)
+        public static async Task<Result<T>> OnSuccessAsync<T>(this Task<Result<T>> resultTask, Func<T, Result> func, bool continueOnCapturedContext = true)
         {
             Result<T> result = await resultTask.ConfigureAwait(continueOnCapturedContext);
             return result.OnSuccess(func);

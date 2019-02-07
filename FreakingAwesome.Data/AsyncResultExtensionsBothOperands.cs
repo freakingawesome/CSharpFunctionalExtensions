@@ -64,14 +64,19 @@ namespace FreakingAwesome.Data
             return await func().ConfigureAwait(continueOnCapturedContext);
         }
 
-        public static async Task<Result> OnSuccessAsync<T>(this Task<Result<T>> resultTask, Func<T, Task<Result>> func, bool continueOnCapturedContext = true)
+        public static async Task<Result<T>> OnSuccessAsync<T>(this Task<Result<T>> resultTask, Func<T, Task<Result>> func, bool continueOnCapturedContext = true)
         {
             Result<T> result = await resultTask.ConfigureAwait(continueOnCapturedContext);
 
             if (result.IsFailure)
-                return Result.Fail(result.Error);
+                return result;
 
-            return await func(result.Value).ConfigureAwait(continueOnCapturedContext);
+            var next = await func(result.Value).ConfigureAwait(continueOnCapturedContext);
+
+            if (next.IsFailure)
+                return Result.Fail<T>(result.Error);
+
+            return result;
         }
 
         public static async Task<Result> OnSuccessAsync(this Task<Result> resultTask, Func<Task<Result>> func, bool continueOnCapturedContext = true)

@@ -60,7 +60,7 @@ namespace FreakingAwesome.Data
             WithTransactionScopeAsync(() => self.OnSuccessAsync(f, continueOnCapturedContext));
 
         [DebuggerStepThrough]
-        public static Task<Result> OnSuccessWithTransactionScopeAsync<T>(this Task<Result<T>> self, Func<T, Task<Result>> f, bool continueOnCapturedContext = true) =>
+        public static Task<Result<T>> OnSuccessWithTransactionScopeAsync<T>(this Task<Result<T>> self, Func<T, Task<Result>> f, bool continueOnCapturedContext = true) =>
             WithTransactionScopeAsync(() => self.OnSuccessAsync(f, continueOnCapturedContext));
 
         [DebuggerStepThrough]
@@ -90,7 +90,7 @@ namespace FreakingAwesome.Data
             WithTransactionScopeAsync(() => self.OnSuccessAsync(f, continueOnCapturedContext));
 
         [DebuggerStepThrough]
-        public static Task<Result> OnSuccessWithTransactionScopeAsync<T>(this Task<Result<T>> self, Func<T, Result> f, bool continueOnCapturedContext = true) =>
+        public static Task<Result<T>> OnSuccessWithTransactionScopeAsync<T>(this Task<Result<T>> self, Func<T, Result> f, bool continueOnCapturedContext = true) =>
             WithTransactionScopeAsync(() => self.OnSuccessAsync(f, continueOnCapturedContext));
 
         [DebuggerStepThrough]
@@ -128,7 +128,7 @@ namespace FreakingAwesome.Data
             WithTransactionScopeAsync(() => self.OnSuccessAsync(f, continueOnCapturedContext));
 
         [DebuggerStepThrough]
-        public static Task<Result> OnSuccessWithTransactionScopeAsync<T>(this Result<T> self, Func<T, Task<Result>> f, bool continueOnCapturedContext = true) =>
+        public static Task<Result<T>> OnSuccessWithTransactionScopeAsync<T>(this Result<T> self, Func<T, Task<Result>> f, bool continueOnCapturedContext = true) =>
             WithTransactionScopeAsync(() => self.OnSuccessAsync(f, continueOnCapturedContext));
 
         [DebuggerStepThrough]

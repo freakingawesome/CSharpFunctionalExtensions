@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Threading.Tasks;
 using FluentAssertions;
 using Xunit;
 
@@ -39,6 +40,20 @@ namespace FreakingAwesome.Data.Tests.ResultTests
             myResult.OnFailure(error => myError = error.First().Error);
 
             myError.Should().Be(_errorMessage);
+        }
+
+        [Fact]
+        public void Should_not_lose_data_upcasting()
+        {
+            Result.Ok(3).OnSuccess(_ => Result.Ok()).Value.Should().Be(3);
+        }
+
+        [Fact]
+        public async Task Should_not_lose_data_upcasting_async()
+        {
+            (await Result.Ok(3).OnSuccessAsync(_ => Task.FromResult(Result.Ok()))).Value.Should().Be(3);
+            (await Task.FromResult(Result.Ok(3)).OnSuccessAsync(_ => Task.FromResult(Result.Ok()))).Value.Should().Be(3);
+            (await Task.FromResult(Result.Ok(3)).OnSuccessAsync(_ => Result.Ok())).Value.Should().Be(3);
         }
         
         private class MyClass
