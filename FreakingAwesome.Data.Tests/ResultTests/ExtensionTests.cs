@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
@@ -46,6 +47,8 @@ namespace FreakingAwesome.Data.Tests.ResultTests
         public void Should_not_lose_data_upcasting()
         {
             Result.Ok(3).OnSuccess(_ => Result.Ok()).Value.Should().Be(3);
+
+            Result.Ok(3).OnSuccess(_ => Result.Fail("oops")).Error.Single().Error.Should().Be("oops");
         }
 
         [Fact]
@@ -54,6 +57,10 @@ namespace FreakingAwesome.Data.Tests.ResultTests
             (await Result.Ok(3).OnSuccessAsync(_ => Task.FromResult(Result.Ok()))).Value.Should().Be(3);
             (await Task.FromResult(Result.Ok(3)).OnSuccessAsync(_ => Task.FromResult(Result.Ok()))).Value.Should().Be(3);
             (await Task.FromResult(Result.Ok(3)).OnSuccessAsync(_ => Result.Ok())).Value.Should().Be(3);
+
+            (await Result.Ok(3).OnSuccessAsync(_ => Task.FromResult(Result.Fail("oops")))).Error.Single().Error.Should().Be("oops");
+            (await Task.FromResult(Result.Ok(3)).OnSuccessAsync(_ => Task.FromResult(Result.Fail("oops")))).Error.Single().Error.Should().Be("oops");
+            (await Task.FromResult(Result.Ok(3)).OnSuccessAsync(_ => Result.Fail("oops"))).Error.Single().Error.Should().Be("oops");
         }
         
         private class MyClass

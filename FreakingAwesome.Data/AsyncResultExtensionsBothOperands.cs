@@ -75,7 +75,7 @@ namespace FreakingAwesome.Data
             var next = await func(result.Value).ConfigureAwait(continueOnCapturedContext);
 
             if (next.IsFailure)
-                return Result.Fail<T>(result.Error);
+                return Result.Fail<T>(next.Error);
 
             return result;
         }
