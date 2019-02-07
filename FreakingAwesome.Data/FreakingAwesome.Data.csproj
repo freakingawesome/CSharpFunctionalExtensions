@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;netstandard1.3;net40;net45;net461</TargetFrameworks>
     <PackageId>FreakingAwesome.Data</PackageId>
-    <PackageVersion>1.0.0-alpha1</PackageVersion>
+    <PackageVersion>1.0.0-alpha2</PackageVersion>
     <Authors>Chad Gilbert</Authors>
     <Description>FreakingAwesome.Data - C# Functional Result and Maybe types with lots of extensions</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
@@ -12,7 +12,7 @@
     <PackageProjectUrl>https://github.com/freakingawesome/FreakingAwesome.Data</PackageProjectUrl>
     <NeutralLanguage>en-US</NeutralLanguage>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <Version>1.0.0-alpha1</Version>
+    <Version>1.0.0-alpha2</Version>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <FileVersion>1.0.0.0</FileVersion>
   </PropertyGroup>
