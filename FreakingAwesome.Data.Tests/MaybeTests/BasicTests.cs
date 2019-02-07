@@ -101,6 +101,20 @@ namespace FreakingAwesome.Data.Tests.MaybeTests
             Maybe<int>.None.Where(_ => false).HasValue.Should().BeFalse();
         }
 
+        [Fact]
+        public void Maybe_From_static_is_good()
+        {
+            Maybe.From(3).HasValue.Should().BeTrue();
+            Maybe.From((int?)null).HasValue.Should().BeFalse();
+
+            MyClass val = null;
+
+            Maybe.From(val).HasValue.Should().BeFalse();
+
+            val = new MyClass();
+            Maybe.From(val).HasValue.Should().BeTrue();
+        }
+
         private class MyClass
         {
             public override string ToString()

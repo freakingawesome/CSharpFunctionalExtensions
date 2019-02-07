@@ -3,6 +3,14 @@ using System;
 
 namespace FreakingAwesome.Data
 {
+    public static class Maybe
+    {
+        public static Maybe<T> From<T>(T obj)
+        {
+            return Maybe<T>.From(obj);
+        }
+    }
+
     public struct Maybe<T> : IEquatable<Maybe<T>>
     {
         private readonly MaybeValueWrapper _value;
