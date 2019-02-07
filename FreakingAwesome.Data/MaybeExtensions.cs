@@ -1,4 +1,7 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace FreakingAwesome.Data
 {
@@ -61,5 +64,34 @@ namespace FreakingAwesome.Data
 
             action(maybe.Value);
         }
+
+        public async static Task<Maybe<K>> SelectAsync<T, K>(this Task<Maybe<T>> self, Func<T, K> f) =>
+            Select(await self, f);
+
+        public async static Task<Maybe<K>> SelectAsync<T, K>(this Task<Maybe<T>> selfTask, Func<T, Task<K>> f)
+        {
+            var self = await selfTask;
+            if (self.HasValue)
+            {
+                return Maybe<K>.From(await f(self.Value));
+            }
+
+            return Maybe<K>.None;
+        }
+
+        public async static Task<Result<T>> ToResultAsync<T>(this Task<Maybe<T>> maybe, string errorMessage) =>
+            (await maybe).ToResult(errorMessage);
+
+        public static Maybe<T> FromFirst<T>(IEnumerable<T> items) =>
+            items.Any() ? Maybe<T>.From(items.First()) : Maybe<T>.None;
+
+        public async static Task<Maybe<T>> FromFirstAsync<T>(Task<IEnumerable<T>> items) =>
+            FromFirst((await items).ToList().Take(1));
+
+        public static Maybe<T> FromSingle<T>(IEnumerable<T> items) =>
+            items.Any() ? Maybe<T>.From(items.Single()) : Maybe<T>.None;
+
+        public async static Task<Maybe<T>> FromSingleAsync<T>(Task<IEnumerable<T>> items) =>
+            FromSingle((await items).ToList().Take(2)); // taking 2 intentionally to blow up on more than 1
     }
 }

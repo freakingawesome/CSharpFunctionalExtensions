@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 
@@ -210,5 +211,14 @@ namespace FreakingAwesome.Data
 
             return result;
         }
+
+        public async static Task<Result<T>> EnsureAsync<T>(this Result<T> self, Func<T, Task<bool>> predicate, string field, string error) =>
+            self.IsFailure || await predicate(self.Value)
+                ? self
+                : Result.Fail<T>(field, error);
+
+        [DebuggerStepThrough]
+        public async static Task<Result> UpcastAsync<T>(this Task<Result<T>> self) =>
+            (await self).Upcast();
     }
 }
